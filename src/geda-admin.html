@@ -18,14 +18,16 @@
 <body class="bg-[#090e1a] text-slate-100 min-h-screen selection:bg-emerald-500 selection:text-white">
 
   <!-- TOP ADMIN SECURITY BAR -->
-  <div class="bg-slate-900 border-b border-slate-800 px-4 py-1.5 text-xs">
-    <div class="max-w-7xl mx-auto flex items-center justify-between">
-      <div class="flex items-center space-x-2 text-slate-400">
-        <span class="inline-block w-2 h-2 rounded-full bg-emerald-400"></span>
-        <span>GEDA State Energy Monitoring Network • SECURE DISCOM GATEWAY (UGVCL, PGVCL, DGVCL, MGVCL)</span>
+  <div class="bg-gradient-to-r from-[#120826] via-slate-950 to-[#090e1a] border-b border-purple-900/40 px-4 py-2 text-xs">
+    <div class="max-w-7xl mx-auto flex flex-wrap items-center justify-between gap-3">
+      <div class="flex items-center space-x-3 text-slate-300">
+        <img src="assets/climate_bg.jpg" alt="Gujarat Climate Change Department" class="h-6 w-auto rounded border border-white/20 object-contain bg-white">
+        <img src="assets/life_logo.png" alt="Mission LiFE" class="h-6 w-auto rounded object-contain bg-white/90 px-1">
+        <span class="inline-block w-2 h-2 rounded-full bg-emerald-400 animate-pulse"></span>
+        <span class="font-medium text-purple-200">GEDA State Energy Monitoring Network • SECURE DISCOM GATEWAY (UGVCL, PGVCL, DGVCL, MGVCL, Torrent Power)</span>
       </div>
       <div class="flex items-center space-x-4 text-slate-400">
-        <span>Session: <strong class="text-slate-200">GEDA-OFFICIAL-AUTH</strong></span>
+        <span class="hidden sm:inline">Session: <strong class="text-emerald-400 font-mono">GEDA-STATE-ADMIN-SECURE</strong></span>
         <a href="index.html" class="text-emerald-400 hover:text-emerald-300 font-semibold flex items-center gap-1">
           ← Citizen Portal
         </a>
@@ -35,16 +37,18 @@
 
   <!-- ADMIN HEADER -->
   <header class="glass-panel border-b border-slate-800/80 sticky top-0 z-50">
-    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-18 flex items-center justify-between py-3">
-      <div class="flex items-center space-x-3">
-        <div class="w-10 h-10 rounded-xl bg-gradient-to-tr from-amber-500 to-emerald-400 p-0.5 flex items-center justify-center shadow-lg">
-          <div class="w-full h-full bg-[#090e1a] rounded-[10px] flex items-center justify-center font-bold text-amber-400 text-lg">
-            🏛️
-          </div>
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-20 flex items-center justify-between py-2">
+      <div class="flex items-center space-x-3.5">
+        <div class="h-12 w-12 rounded-xl overflow-hidden border border-emerald-500/40 bg-white p-1 shadow-md shadow-emerald-500/20 flex items-center justify-center">
+          <img src="assets/geda_logo.jpg" alt="GEDA Official Crest" class="h-full w-full object-contain">
         </div>
         <div>
-          <span class="text-xs tracking-wider text-amber-400 font-bold block uppercase">Govt. of Gujarat • State Energy Cell</span>
-          <h1 class="text-lg font-bold text-white tracking-tight leading-none">GEDA Mission LiFE Admin Control Panel</h1>
+          <div class="flex items-center space-x-2">
+            <span class="text-[10px] tracking-wider text-amber-400 font-bold uppercase">Govt. of Gujarat • State Energy Cell</span>
+            <span class="text-[10px] px-1.5 py-0.2 rounded bg-emerald-900/60 text-emerald-300 border border-emerald-500/30">DISCOM Active</span>
+          </div>
+          <h1 class="text-lg sm:text-xl font-bold text-white tracking-tight leading-none">GEDA Mission LiFE Admin Control Panel</h1>
+          <span class="text-[11px] text-slate-400 font-mono">State Level District Performance & Grid Peak Shaving Portal</span>
         </div>
       </div>
 
@@ -52,7 +56,7 @@
         <button onclick="window.print()" class="hidden sm:flex items-center space-x-1.5 px-3 py-1.5 text-xs font-semibold rounded-lg bg-slate-800 hover:bg-slate-700 text-slate-200 border border-slate-700 transition">
           <span>🖨️ Print Report</span>
         </button>
-        <a href="index.html" class="px-3.5 py-1.5 text-xs font-semibold rounded-lg bg-emerald-600 hover:bg-emerald-500 text-white transition flex items-center gap-1.5">
+        <a href="index.html" class="px-3.5 py-1.5 text-xs font-semibold rounded-lg bg-emerald-600 hover:bg-emerald-500 text-white transition flex items-center gap-1.5 shadow-md shadow-emerald-600/30">
           <span>Citizen Portal</span>
         </a>
       </div>

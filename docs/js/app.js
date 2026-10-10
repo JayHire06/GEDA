@@ -1,12 +1,12 @@
 /**
  * src/js/app.js
- * GEDA Mission LiFE Citizen Portal — Peak-Shifting & Load Forecasting Controller
+ * GEDA Mission LiFE Citizen Portal — Peak-Shifting, Load Forecasting & Onboarding Controller
  */
 
 let forecastChart = null;
 let rawForecastData = null;
 
-// Default fallback data for local file:// execution if fetch is blocked by browser CORS
+// Fallback data for local file:// execution if fetch is blocked by browser CORS
 const FALLBACK_FORECAST = {
   metadata: { dataset_total_hours: 34198, region: "Gandhinagar, Gujarat" },
   models_scorecard: {
@@ -38,7 +38,6 @@ const FALLBACK_FORECAST = {
   }
 };
 
-// Appliance electrical specifications
 const APPLIANCE_DEFAULTS = {
   ac: { name: "Air Conditioner (1.5 Ton)", power_kw: 1.5, default_peak_hours: 3.0 },
   pump: { name: "Water Submersible Pump", power_kw: 1.0, default_peak_hours: 1.5 },
@@ -46,13 +45,116 @@ const APPLIANCE_DEFAULTS = {
   washer: { name: "Washing Machine / Geyser", power_kw: 1.2, default_peak_hours: 1.0 }
 };
 
-const TARIFF_SAVING_PER_KWH = 2.10; // INR/kWh savings between Peak (Rs 6.20) and Solar Day (Rs 4.10)
+const TARIFF_SAVING_PER_KWH = 2.10;
 const LIFE_POINTS_PER_KWH = 10;
+
+// The 7 Core Themes of Mission LiFE
+const LIFE_THEMES_DATA = [
+  {
+    id: 1,
+    title: "Save Energy",
+    gujaratFocus: "Grid Peak-Shifting & Rooftop Solar",
+    description: "Shift high-power appliance runtime away from Gujarat evening peak hours (18:00–22:00 IST) to solar midday surplus hours.",
+    action: "Schedule AC pre-cooling before 6 PM and transition pumps to midday.",
+    icon: "⚡",
+    pointsBonus: "+250 LiFE pts"
+  },
+  {
+    id: 2,
+    title: "Save Water",
+    gujaratFocus: "Solar Agricultural & Rooftop Efficiency",
+    description: "Optimize submersible water pump operations with automatic micro-irrigation and overhead tank timers.",
+    action: "Run pumps between 12:00 PM – 2:00 PM using direct solar PV power.",
+    icon: "💧",
+    pointsBonus: "+150 LiFE pts"
+  },
+  {
+    id: 3,
+    title: "Say No to Single-Use Plastics",
+    gujaratFocus: "Circular Packaging in Urban Hubs",
+    description: "Eliminate disposable polythene in Ahmedabad, Surat, and Rajkot markets with biodegradable jute and cloth alternatives.",
+    action: "Adopt reusable carry bags and stainless steel utility containers.",
+    icon: "🛍️",
+    pointsBonus: "+100 LiFE pts"
+  },
+  {
+    id: 4,
+    title: "Adopt Sustainable Food Systems",
+    gujaratFocus: "Indigenous Millets & Local Organic Produce",
+    description: "Incorporate traditional Gujarat Bajra, Jowar, and local organic legumes to decrease agricultural carbon and water footprints.",
+    action: "Substitute 2 meals/week with indigenous whole grains.",
+    icon: "🌾",
+    pointsBonus: "+120 LiFE pts"
+  },
+  {
+    id: 5,
+    title: "Reduce Waste",
+    gujaratFocus: "Municipal Source Segregation & Composting",
+    description: "Segregate dry recyclables and wet organic kitchen waste at home to support municipal bio-methanation plants.",
+    action: "Compost home organic waste into nutrient-rich garden soil.",
+    icon: "♻️",
+    pointsBonus: "+100 LiFE pts"
+  },
+  {
+    id: 6,
+    title: "Adopt Healthy Lifestyles",
+    gujaratFocus: "Green Mobility & Clean Commute",
+    description: "Electrify daily commutes with electric two-wheelers powered by solar rooftops, or walk/cycle for short neighborhood trips.",
+    action: "Charge EV during daytime solar generation windows.",
+    icon: "🚲",
+    pointsBonus: "+200 LiFE pts"
+  },
+  {
+    id: 7,
+    title: "Reduce E-Waste",
+    gujaratFocus: "Certified Solar PV & Electronics Recycling",
+    description: "Safely channel decommissioned inverters, solar panels, and obsolete smartphones through authorized GEDA electronic recyclers.",
+    action: "Deposit old electronics at verified GEDA municipal collection drives.",
+    icon: "📱",
+    pointsBonus: "+150 LiFE pts"
+  }
+];
+
+let currentOnboardingIndex = 0;
 
 document.addEventListener("DOMContentLoaded", () => {
   initApplianceSliders();
+  initDiscomDropdown();
+  initOnboardingSystem();
   loadForecastData();
+
+  if (window.gedaAuthDB) {
+    window.gedaAuthDB.onProfileChange(profile => {
+      updateNavbarAndProfileUI(profile);
+    });
+  }
 });
+
+function initDiscomDropdown() {
+  const select = document.getElementById("navDiscomSelect");
+  if (!select || !window.gedaAuthDB) return;
+
+  const profile = window.gedaAuthDB.getProfile();
+  if (profile.discom) select.value = profile.discom;
+
+  select.addEventListener("change", (e) => {
+    window.gedaAuthDB.setDiscom(e.target.value);
+  });
+}
+
+function updateNavbarAndProfileUI(profile) {
+  if (!profile) return;
+
+  const headerPts = document.getElementById("headerLifePoints");
+  const heroPts = document.getElementById("heroLifePointsDisplay");
+  const consumerTag = document.getElementById("navConsumerTag");
+  const discomTag = document.getElementById("navDiscomTag");
+
+  if (headerPts) headerPts.innerText = (profile.lifePoints || 0).toLocaleString("en-IN");
+  if (heroPts) heroPts.innerText = (profile.lifePoints || 0).toLocaleString("en-IN");
+  if (consumerTag) consumerTag.innerText = `Acc: ${profile.consumerNumber || '01234/98765'}`;
+  if (discomTag) discomTag.innerText = profile.discom || "UGVCL";
+}
 
 async function loadForecastData() {
   try {
@@ -89,7 +191,7 @@ function renderForecastChart(chartData) {
         {
           label: "Actual Household Demand (kWh)",
           data: chartData.actual_demand_kwh,
-          borderColor: "#10b981", // Emerald
+          borderColor: "#10b981",
           backgroundColor: "rgba(16, 185, 129, 0.1)",
           borderWidth: 2.5,
           tension: 0.3,
@@ -101,7 +203,7 @@ function renderForecastChart(chartData) {
         {
           label: "XGBoost 3.4 ML Forecast (kWh)",
           data: chartData.xgboost_kwh,
-          borderColor: "#38bdf8", // Cyan
+          borderColor: "#38bdf8",
           borderWidth: 2,
           borderDash: [4, 4],
           tension: 0.3,
@@ -113,7 +215,7 @@ function renderForecastChart(chartData) {
         {
           label: "Naive 24h Baseline (t-24)",
           data: chartData.naive_24h_kwh,
-          borderColor: "#94a3b8", // Slate
+          borderColor: "#94a3b8",
           borderWidth: 1.5,
           tension: 0.2,
           borderDash: [2, 2],
@@ -137,43 +239,25 @@ function renderForecastChart(chartData) {
     options: {
       responsive: true,
       maintainAspectRatio: false,
-      interaction: {
-        mode: "index",
-        intersect: false
-      },
+      interaction: { mode: "index", intersect: false },
       plugins: {
         legend: {
           position: "top",
-          labels: {
-            color: "#e2e8f0",
-            font: { family: "Inter", size: 12 },
-            boxWidth: 16
-          }
+          labels: { color: "#e2e8f0", font: { family: "Inter", size: 12 }, boxWidth: 16 }
         },
         tooltip: {
-          backgroundColor: "rgba(15, 23, 42, 0.95)",
+          backgroundColor: "rgba(15, 11, 30, 0.95)",
           titleColor: "#38bdf8",
           bodyColor: "#f1f5f9",
-          borderColor: "rgba(255, 255, 255, 0.15)",
+          borderColor: "rgba(168, 85, 247, 0.3)",
           borderWidth: 1,
-          padding: 12,
-          callbacks: {
-            afterTitle: (context) => {
-              const idx = context[0].dataIndex;
-              const isPeak = chartData.is_peak_hours[idx] === 1;
-              return isPeak ? "⚡ GUJARAT EVENING PEAK WINDOW (18:00 - 22:00 IST)" : "☀️ OFF-PEAK / SOLAR PERIOD";
-            }
-          }
+          padding: 12
         }
       },
       scales: {
         x: {
           grid: { color: "rgba(255, 255, 255, 0.04)" },
-          ticks: {
-            color: "#94a3b8",
-            maxTicksLimit: 18,
-            font: { family: "Inter", size: 11 }
-          }
+          ticks: { color: "#94a3b8", maxTicksLimit: 18, font: { family: "Inter", size: 11 } }
         },
         y: {
           type: "linear",
@@ -246,7 +330,6 @@ function calculatePeakShiftingImpact() {
   const lifePointsAnnual = Math.round(annualShiftedKwh * LIFE_POINTS_PER_KWH);
   const co2OffsetKg = Math.round(annualShiftedKwh * 0.716);
 
-  // Update DOM readouts
   const dailyShiftEl = document.getElementById("dailyShiftedKwh");
   const annualShiftEl = document.getElementById("annualShiftedKwh");
   const monthlySaveEl = document.getElementById("monthlySavingsInr");
@@ -262,7 +345,6 @@ function calculatePeakShiftingImpact() {
   if (lifePtsEl) lifePtsEl.innerText = lifePointsAnnual.toLocaleString("en-IN");
   if (co2El) co2El.innerText = `${co2OffsetKg.toLocaleString("en-IN")} kg/yr`;
 
-  // Dynamic Gamification Tier Badge
   if (badgeEl) {
     if (lifePointsAnnual >= 10000) {
       badgeEl.innerText = "Platinum Net-Zero Pioneer";
@@ -277,5 +359,94 @@ function calculatePeakShiftingImpact() {
       badgeEl.innerText = "Bronze LiFE Participant";
       badgeEl.className = "px-3 py-1 text-xs font-semibold rounded-full bg-slate-800 text-slate-300 border border-slate-600";
     }
+  }
+}
+
+// -------------------------------------------------------------
+// Cinematic Onboarding System ("Begin Your Mission")
+// -------------------------------------------------------------
+function initOnboardingSystem() {
+  const triggerBtn = document.getElementById("beginMissionBtn");
+  const overlay = document.getElementById("onboardingOverlay");
+  const closeBtn = document.getElementById("closeOnboardingBtn");
+  const nextBtn = document.getElementById("onboardingNextBtn");
+  const prevBtn = document.getElementById("onboardingPrevBtn");
+
+  if (triggerBtn && overlay) {
+    triggerBtn.addEventListener("click", () => {
+      currentOnboardingIndex = 0;
+      updateOnboardingSlide();
+      overlay.classList.remove("hidden");
+    });
+  }
+
+  if (closeBtn && overlay) {
+    closeBtn.addEventListener("click", () => {
+      overlay.classList.add("hidden");
+    });
+  }
+
+  if (nextBtn) {
+    nextBtn.addEventListener("click", () => {
+      if (currentOnboardingIndex < LIFE_THEMES_DATA.length - 1) {
+        currentOnboardingIndex++;
+        updateOnboardingSlide();
+      } else {
+        // Complete onboarding: award 500 bonus points!
+        if (window.gedaAuthDB) {
+          window.gedaAuthDB.addPoints(500);
+          alert("🎉 Congratulations! You completed the Mission LiFE Onboarding Journey. 500 bonus LiFE Points have been credited to your profile!");
+        }
+        overlay.classList.add("hidden");
+      }
+    });
+  }
+
+  if (prevBtn) {
+    prevBtn.addEventListener("click", () => {
+      if (currentOnboardingIndex > 0) {
+        currentOnboardingIndex--;
+        updateOnboardingSlide();
+      }
+    });
+  }
+}
+
+function updateOnboardingSlide() {
+  const theme = LIFE_THEMES_DATA[currentOnboardingIndex];
+  if (!theme) return;
+
+  const iconEl = document.getElementById("onboardThemeIcon");
+  const numEl = document.getElementById("onboardThemeNum");
+  const titleEl = document.getElementById("onboardThemeTitle");
+  const focusEl = document.getElementById("onboardThemeFocus");
+  const descEl = document.getElementById("onboardThemeDesc");
+  const actionEl = document.getElementById("onboardThemeAction");
+  const bonusEl = document.getElementById("onboardThemeBonus");
+  const progressEl = document.getElementById("onboardProgressFill");
+  const nextBtn = document.getElementById("onboardingNextBtn");
+  const prevBtn = document.getElementById("onboardingPrevBtn");
+
+  if (iconEl) iconEl.innerText = theme.icon;
+  if (numEl) numEl.innerText = `Theme ${theme.id} of 7`;
+  if (titleEl) titleEl.innerText = theme.title;
+  if (focusEl) focusEl.innerText = theme.gujaratFocus;
+  if (descEl) descEl.innerText = theme.description;
+  if (actionEl) actionEl.innerText = theme.action;
+  if (bonusEl) bonusEl.innerText = theme.pointsBonus;
+
+  if (progressEl) {
+    const pct = ((currentOnboardingIndex + 1) / LIFE_THEMES_DATA.length) * 100;
+    progressEl.style.width = `${pct}%`;
+  }
+
+  if (prevBtn) {
+    prevBtn.style.visibility = (currentOnboardingIndex === 0) ? "hidden" : "visible";
+  }
+
+  if (nextBtn) {
+    nextBtn.innerText = (currentOnboardingIndex === LIFE_THEMES_DATA.length - 1) 
+      ? "Complete & Claim +500 Pts 🚀" 
+      : "Next Theme →";
   }
 }
