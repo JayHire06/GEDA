@@ -1,0 +1,539 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>GEDA Mission LiFE — Smart Energy & Rooftop Solar Portal</title>
+  <meta name="description" content="Gujarat Energy Development Agency (GEDA) Mission LiFE citizen platform. Peak-shifting energy tracker, rooftop solar ROI calculator, and LiFE points reward engine.">
+  
+  <!-- Tailwind CSS CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  
+  <!-- Chart.js CDN -->
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+  <!-- Custom Stylesheet -->
+  <link rel="stylesheet" href="css/styles.css">
+</head>
+<body class="bg-[#090e1a] text-slate-100 min-h-screen selection:bg-emerald-500 selection:text-white">
+
+  <!-- TOP ANNOUNCEMENT BANNER -->
+  <div class="bg-gradient-to-r from-emerald-900/80 via-emerald-800/80 to-slate-900 border-b border-emerald-500/20 px-4 py-2 text-xs">
+    <div class="max-w-7xl mx-auto flex flex-wrap items-center justify-between gap-2">
+      <div class="flex items-center space-x-2">
+        <span class="inline-block w-2 h-2 rounded-full bg-emerald-400 pulse-green"></span>
+        <span class="font-medium text-emerald-200">GEDA Mission LiFE (Lifestyle for Environment) — Gujarat State Transition Initiative</span>
+      </div>
+      <div class="flex items-center space-x-4 text-slate-300">
+        <span>PM Surya Ghar Subsidy: <strong class="text-amber-300">Up to ₹78,000</strong></span>
+        <a href="geda-admin.html" class="text-cyan-400 hover:text-cyan-300 font-semibold underline underline-offset-2 flex items-center gap-1">
+          GEDA Official Portal →
+        </a>
+      </div>
+    </div>
+  </div>
+
+  <!-- NAVIGATION HEADER -->
+  <header class="sticky top-0 z-50 glass-panel border-b border-slate-800/80">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-18 flex items-center justify-between py-3">
+      <div class="flex items-center space-x-3">
+        <div class="w-10 h-10 rounded-xl bg-gradient-to-tr from-emerald-500 to-cyan-400 p-0.5 flex items-center justify-center shadow-lg shadow-emerald-500/20">
+          <div class="w-full h-full bg-[#090e1a] rounded-[10px] flex items-center justify-center font-bold text-emerald-400 text-lg">
+            ⚡
+          </div>
+        </div>
+        <div>
+          <span class="text-xs tracking-wider text-emerald-400 font-bold block uppercase">Govt. of Gujarat</span>
+          <h1 class="text-lg font-bold text-white tracking-tight leading-none">GEDA Mission LiFE</h1>
+        </div>
+      </div>
+
+      <nav class="hidden md:flex items-center space-x-8 text-sm font-medium text-slate-300">
+        <a href="#tracker" class="hover:text-emerald-400 transition">Smart Energy Tracker</a>
+        <a href="#solar" class="hover:text-amber-400 transition">Solar ROI Calculator</a>
+        <a href="#rewards" class="hover:text-cyan-400 transition">LiFE Points</a>
+        <a href="#vendors" class="hover:text-white transition">Approved Vendors</a>
+      </nav>
+
+      <div class="flex items-center space-x-3">
+        <div class="hidden sm:flex items-center space-x-2 bg-slate-800/80 border border-slate-700/80 rounded-full px-3 py-1">
+          <span class="text-amber-400 text-xs font-bold">★</span>
+          <span class="text-xs text-slate-400">LiFE Points:</span>
+          <span id="headerLifePoints" class="text-xs font-bold text-amber-300">7,471</span>
+        </div>
+        <a href="geda-admin.html" class="px-3.5 py-1.5 text-xs font-semibold rounded-lg bg-emerald-600/90 hover:bg-emerald-500 text-white transition shadow-md shadow-emerald-600/20 flex items-center gap-1.5">
+          <span>Admin Panel</span>
+        </a>
+      </div>
+    </div>
+  </header>
+
+  <!-- HERO SECTION -->
+  <section class="relative overflow-hidden py-14 border-b border-slate-800/60 bg-gradient-to-b from-[#090e1a] via-[#0d1627] to-[#090e1a]">
+    <div class="absolute inset-0 bg-[radial-gradient(ellipse_80%_80%_at_50%_-20%,rgba(16,185,129,0.15),rgba(255,255,255,0))]"></div>
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
+      <div class="text-center max-w-3xl mx-auto mb-10">
+        <div class="inline-flex items-center space-x-2 px-3 py-1 rounded-full bg-emerald-500/10 border border-emerald-500/30 text-emerald-300 text-xs font-semibold mb-4">
+          <span class="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse"></span>
+          <span>Gujarat Clean Energy Transition & Peak-Shaving System</span>
+        </div>
+        <h2 class="text-3xl sm:text-4xl md:text-5xl font-black text-white tracking-tight mb-4">
+          Power Your Home with <span class="gradient-text-green">Mission LiFE</span> & <span class="gradient-text-solar">Solar Energy</span>
+        </h2>
+        <p class="text-base text-slate-400 leading-relaxed">
+          Shift heavy appliance loads away from grid peak hours (6 PM – 10 PM), tap into Gujarat's high solar irradiance, earn redeemable LiFE municipal reward points, and cut your electricity bill by up to 80%.
+        </p>
+      </div>
+
+      <!-- Quick Metrics Hero Grid -->
+      <div class="grid grid-cols-2 md:grid-cols-4 gap-4 max-w-5xl mx-auto">
+        <div class="glass-card p-4 rounded-2xl border border-slate-800">
+          <div class="text-xs font-semibold text-slate-400 uppercase tracking-wider mb-1">Statewide Solar Installed</div>
+          <div class="text-2xl font-black text-white">765.5 <span class="text-sm font-semibold text-emerald-400">MW</span></div>
+          <div class="text-xs text-slate-500 mt-1">75.4% of GEDA 1,015 MW Target</div>
+        </div>
+        <div class="glass-card p-4 rounded-2xl border border-slate-800">
+          <div class="text-xs font-semibold text-slate-400 uppercase tracking-wider mb-1">Evening Grid Peak Window</div>
+          <div class="text-2xl font-black text-amber-400">18:00 – 22:00</div>
+          <div class="text-xs text-slate-500 mt-1">+74% surge over daytime baseline</div>
+        </div>
+        <div class="glass-card p-4 rounded-2xl border border-slate-800">
+          <div class="text-xs font-semibold text-slate-400 uppercase tracking-wider mb-1">Govt Subsidy (PM Surya Ghar)</div>
+          <div class="text-2xl font-black text-emerald-400">₹78,000</div>
+          <div class="text-xs text-slate-500 mt-1">Direct DBT credit for 3 kW systems</div>
+        </div>
+        <div class="glass-card p-4 rounded-2xl border border-slate-800">
+          <div class="text-xs font-semibold text-slate-400 uppercase tracking-wider mb-1">Average Solar Payback</div>
+          <div class="text-2xl font-black text-cyan-400">&lt; 2.8 <span class="text-sm font-semibold text-slate-300">Years</span></div>
+          <div class="text-xs text-slate-500 mt-1">Across Gandhinagar, Rajkot, Surat</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- FEATURE 1: SMART ENERGY TRACKER (PEAK-SHIFTING ENGINE) -->
+  <section id="tracker" class="py-16 border-b border-slate-800/60 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+    <div class="flex flex-col md:flex-row md:items-end justify-between mb-8 gap-4">
+      <div>
+        <div class="text-xs font-bold text-emerald-400 uppercase tracking-wider mb-1">Feature 1: ML Demand Forecast & Peak Shifting</div>
+        <h3 class="text-2xl sm:text-3xl font-extrabold text-white">Smart Household Energy Tracker</h3>
+        <p class="text-sm text-slate-400 mt-1 max-w-2xl">
+          Powered by an <strong>XGBoost 3.4</strong> machine learning model trained on historical hourly electricity load, ambient temperature, and solar irradiance.
+        </p>
+      </div>
+      <div class="flex items-center space-x-3 text-xs">
+        <div class="glass-panel px-3 py-1.5 rounded-lg border border-slate-700 flex items-center gap-2">
+          <span class="text-slate-400">XGBoost Holdout RMSE:</span>
+          <span id="xgbRmseValue" class="font-bold text-emerald-400">0.469 kWh</span>
+          <span id="xgbImprvValue" class="text-[10px] bg-emerald-500/20 text-emerald-300 px-1.5 py-0.5 rounded font-bold">+39.7%</span>
+        </div>
+        <div class="glass-panel px-3 py-1.5 rounded-lg border border-amber-500/30 bg-amber-950/20 text-amber-300 flex items-center gap-1.5">
+          <span class="w-2 h-2 rounded-full bg-amber-400 pulse-amber"></span>
+          <span>Peak Alert: 18:00 - 22:00 IST</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Chart Container -->
+    <div class="glass-panel p-6 rounded-3xl border border-slate-800 mb-8">
+      <div class="flex flex-wrap items-center justify-between mb-4 gap-2">
+        <div>
+          <h4 class="text-base font-bold text-white">72-Hour Load Forecast vs Actual Demand Curve</h4>
+          <p class="text-xs text-slate-400">Gandhinagar Residential Substation Sample (Hourly Resolution)</p>
+        </div>
+        <div class="flex items-center space-x-4 text-xs">
+          <div class="flex items-center gap-1.5"><span class="w-3 h-3 rounded-full bg-emerald-500"></span><span class="text-slate-300">Actual Demand</span></div>
+          <div class="flex items-center gap-1.5"><span class="w-3 h-1 bg-cyan-400"></span><span class="text-slate-300">XGBoost Forecast</span></div>
+          <div class="flex items-center gap-1.5"><span class="w-3 h-1 bg-slate-400"></span><span class="text-slate-300">Naive 24h Baseline</span></div>
+          <div class="flex items-center gap-1.5"><span class="w-3 h-3 rounded-full bg-amber-500/40"></span><span class="text-slate-300">Solar Irradiance</span></div>
+        </div>
+      </div>
+      <div class="h-80 sm:h-96 w-full relative">
+        <canvas id="forecastChart"></canvas>
+      </div>
+      <div class="mt-4 pt-3 border-t border-slate-800/80 flex flex-wrap items-center justify-between text-xs text-slate-400">
+        <span>💡 <strong>Grid Dispatch Insight:</strong> Evening surge (18:00-22:00) drives peak generation costs up to ₹6.20/kWh. Midday solar surplus hours offer ₹4.10/kWh tariff.</span>
+        <span class="text-emerald-400 font-medium">Auto-synced with NASA POWER & IMD Gujarat Data</span>
+      </div>
+    </div>
+
+    <!-- Interactive Appliance Load Shifting Simulator -->
+    <div class="grid grid-cols-1 lg:grid-cols-12 gap-6">
+      <div class="lg:col-span-7 glass-panel p-6 rounded-3xl border border-slate-800">
+        <div class="flex items-center justify-between mb-4">
+          <h4 class="text-lg font-bold text-white flex items-center gap-2">
+            <span>⚙️</span> Interactive Appliance Load-Shifting Sliders
+          </h4>
+          <span class="text-xs text-slate-400">Shift runtime from 6-10 PM to 11 AM-3 PM</span>
+        </div>
+
+        <div class="space-y-5">
+          <!-- Slider 1: AC -->
+          <div>
+            <div class="flex justify-between text-xs font-semibold mb-1.5">
+              <span class="text-slate-300">❄️ Air Conditioner (1.5 Ton • 1.5 kW)</span>
+              <span id="val_ac" class="text-emerald-400 font-bold">25% Shifted</span>
+            </div>
+            <input id="slider_ac" type="range" min="0" max="100" value="25" class="w-full h-2 bg-slate-700 rounded-lg cursor-pointer">
+            <div class="flex justify-between text-[10px] text-slate-500 mt-1">
+              <span>0% (All in peak)</span>
+              <span>Pre-cool before 6 PM</span>
+              <span>100% (Daytime solar only)</span>
+            </div>
+          </div>
+
+          <!-- Slider 2: Water Pump -->
+          <div>
+            <div class="flex justify-between text-xs font-semibold mb-1.5">
+              <span class="text-slate-300">🚰 Submersible Water Pump (1.0 kW)</span>
+              <span id="val_pump" class="text-emerald-400 font-bold">40% Shifted</span>
+            </div>
+            <input id="slider_pump" type="range" min="0" max="100" value="40" class="w-full h-2 bg-slate-700 rounded-lg cursor-pointer">
+            <div class="flex justify-between text-[10px] text-slate-500 mt-1">
+              <span>0%</span>
+              <span>Run tank pump 12 PM - 2 PM</span>
+              <span>100%</span>
+            </div>
+          </div>
+
+          <!-- Slider 3: EV Charger -->
+          <div>
+            <div class="flex justify-between text-xs font-semibold mb-1.5">
+              <span class="text-slate-300">🚗 Electric Vehicle Charging (3.3 kW)</span>
+              <span id="val_ev" class="text-emerald-400 font-bold">30% Shifted</span>
+            </div>
+            <input id="slider_ev" type="range" min="0" max="100" value="30" class="w-full h-2 bg-slate-700 rounded-lg cursor-pointer">
+            <div class="flex justify-between text-[10px] text-slate-500 mt-1">
+              <span>0% (Plug-in at 7 PM)</span>
+              <span>Charge during solar surplus</span>
+              <span>100%</span>
+            </div>
+          </div>
+
+          <!-- Slider 4: Washing Machine / Geyser -->
+          <div>
+            <div class="flex justify-between text-xs font-semibold mb-1.5">
+              <span class="text-slate-300">🧺 Washing Machine & Geyser (1.2 kW)</span>
+              <span id="val_washer" class="text-emerald-400 font-bold">50% Shifted</span>
+            </div>
+            <input id="slider_washer" type="range" min="0" max="100" value="50" class="w-full h-2 bg-slate-700 rounded-lg cursor-pointer">
+            <div class="flex justify-between text-[10px] text-slate-500 mt-1">
+              <span>0%</span>
+              <span>Timer schedule at 1 PM</span>
+              <span>100%</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Real-Time Impact Scorecard -->
+      <div class="lg:col-span-5 glass-panel p-6 rounded-3xl border border-slate-800 flex flex-col justify-between">
+        <div>
+          <div class="flex items-center justify-between mb-4">
+            <h4 class="text-base font-bold text-white">Household Impact & Savings</h4>
+            <span id="lifeTierBadge" class="px-3 py-1 text-xs font-semibold rounded-full bg-emerald-900/60 text-emerald-300 border border-emerald-500/40">
+              Silver Energy Conserver
+            </span>
+          </div>
+
+          <div class="grid grid-cols-2 gap-4 mb-4">
+            <div class="bg-slate-900/60 p-3.5 rounded-2xl border border-slate-800">
+              <div class="text-[11px] text-slate-400 mb-1">Avoided Peak Usage</div>
+              <div id="dailyShiftedKwh" class="text-xl font-black text-white">2.05 kWh/day</div>
+              <div id="annualShiftedKwh" class="text-xs text-emerald-400 font-semibold mt-0.5">748 kWh/yr</div>
+            </div>
+            <div class="bg-slate-900/60 p-3.5 rounded-2xl border border-slate-800">
+              <div class="text-[11px] text-slate-400 mb-1">Annual Bill Reduction</div>
+              <div id="annualSavingsInr" class="text-xl font-black text-emerald-400">₹1,570</div>
+              <div id="monthlySavingsInr" class="text-xs text-slate-400 mt-0.5">₹131 / month</div>
+            </div>
+          </div>
+
+          <div class="space-y-2.5 text-xs text-slate-300 mb-4">
+            <div class="flex justify-between items-center py-1.5 border-b border-slate-800">
+              <span class="text-slate-400">Mission LiFE Points Awarded:</span>
+              <span id="totalLifePoints" class="font-bold text-amber-300 text-sm">7,471 pts</span>
+            </div>
+            <div class="flex justify-between items-center py-1.5 border-b border-slate-800">
+              <span class="text-slate-400">Avoided Household CO₂ Emissions:</span>
+              <span id="co2OffsetKg" class="font-bold text-cyan-300">536 kg/yr</span>
+            </div>
+            <div class="flex justify-between items-center py-1.5">
+              <span class="text-slate-400">Equivalent Trees Planted:</span>
+              <span class="font-bold text-emerald-400">~24 Trees / yr</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="bg-emerald-950/30 border border-emerald-500/20 p-3.5 rounded-2xl flex items-center gap-3">
+          <div class="text-2xl">🌱</div>
+          <div class="text-xs text-slate-300">
+            <strong class="text-emerald-300">LiFE Reward Incentive:</strong> Points are redeemable for discounts on Gujarat municipal property tax and EV charging credits.
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- FEATURE 2: ROOFTOP SOLAR SAVINGS CALCULATOR -->
+  <section id="solar" class="py-16 border-b border-slate-800/60 bg-gradient-to-b from-[#090e1a] via-[#0b1322] to-[#090e1a]">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="text-center max-w-3xl mx-auto mb-10">
+        <div class="text-xs font-bold text-amber-400 uppercase tracking-wider mb-1">Feature 2: Solar Yield & Financial ROI Engine</div>
+        <h3 class="text-2xl sm:text-3xl md:text-4xl font-extrabold text-white">Rooftop Solar Feasibility Calculator</h3>
+        <p class="text-sm text-slate-400 mt-2">
+          Grounded in NASA POWER solar radiation data across Gujarat districts and the latest <strong>PM Surya Ghar: Muft Bijli Yojana</strong> government subsidy guidelines.
+        </p>
+      </div>
+
+      <div class="grid grid-cols-1 lg:grid-cols-12 gap-8">
+        <!-- Input Configuration Card -->
+        <div class="lg:col-span-5 glass-panel p-6 rounded-3xl border border-slate-800">
+          <h4 class="text-lg font-bold text-white mb-4 flex items-center gap-2">
+            <span>☀️</span> Enter Your Household Details
+          </h4>
+
+          <div class="space-y-4">
+            <!-- District Select -->
+            <div>
+              <label class="block text-xs font-semibold text-slate-300 mb-1.5">Your District in Gujarat</label>
+              <select id="solarDistrictSelect" class="w-full glass-input rounded-xl px-3.5 py-2.5 text-sm font-medium">
+                <option value="Gandhinagar">Gandhinagar (Admin Capital • 1,540 kWh/kWp/yr)</option>
+                <option value="Ahmedabad">Ahmedabad (Metro • 1,520 kWh/kWp/yr)</option>
+                <option value="Surat">Surat (Commercial Hub • 1,460 kWh/kWp/yr)</option>
+                <option value="Vadodara">Vadodara (Industrial Corridor • 1,490 kWh/kWp/yr)</option>
+                <option value="Rajkot">Rajkot (Saurashtra Solar Hub • 1,595 kWh/kWp/yr)</option>
+              </select>
+            </div>
+
+            <!-- Monthly Bill -->
+            <div>
+              <label class="block text-xs font-semibold text-slate-300 mb-1.5">Average Monthly Electricity Bill (₹)</label>
+              <input id="monthlyBillInput" type="number" value="2200" placeholder="e.g. 2200" class="w-full glass-input rounded-xl px-3.5 py-2.5 text-sm font-mono font-semibold">
+              <span class="text-[10px] text-slate-500 mt-1 block">Automatically calculates recommended system capacity to achieve ₹0 net bill.</span>
+            </div>
+
+            <!-- Roof Area -->
+            <div>
+              <label class="block text-xs font-semibold text-slate-300 mb-1.5">Available Shadow-Free Roof Area (Sq. Ft.)</label>
+              <input id="roofAreaInput" type="number" value="350" placeholder="e.g. 350" class="w-full glass-input rounded-xl px-3.5 py-2.5 text-sm font-mono">
+              <span class="text-[10px] text-slate-500 mt-1 block">Rule of thumb: 100 sq.ft required per 1 kW system.</span>
+            </div>
+
+            <!-- System Size Slider -->
+            <div class="pt-2">
+              <div class="flex justify-between text-xs font-semibold mb-1.5">
+                <span class="text-slate-300">Selected System Capacity:</span>
+                <span id="systemSizeVal" class="text-amber-400 font-bold text-sm">3.0 kW</span>
+              </div>
+              <input id="systemSizeSlider" type="range" min="1" max="10" step="0.5" value="3" class="w-full h-2 bg-slate-700 rounded-lg cursor-pointer">
+              <div class="flex justify-between text-[10px] text-slate-500 mt-1">
+                <span>1 kW (Small Home)</span>
+                <span>3 kW (Standard 3BHK)</span>
+                <span>10 kW (Bungalow/Villa)</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- Subsidy Slab Info Box -->
+          <div class="mt-6 p-4 rounded-2xl bg-amber-950/20 border border-amber-500/20 text-xs text-amber-200/90 space-y-1.5">
+            <div class="font-bold text-amber-300 flex items-center gap-1.5">
+              <span>🏛️</span> PM Surya Ghar Subsidy Breakdown:
+            </div>
+            <div>• Up to 2 kW: ₹30,000 / kW (₹60,000 for 2 kW)</div>
+            <div>• 3 kW and above: Capped at <strong class="text-white">₹78,000 flat</strong></div>
+          </div>
+        </div>
+
+        <!-- Output ROI Card -->
+        <div class="lg:col-span-7 glass-panel p-6 rounded-3xl border border-slate-800 flex flex-col justify-between">
+          <div>
+            <div class="flex items-center justify-between mb-4 pb-3 border-b border-slate-800">
+              <div>
+                <span class="text-xs text-slate-400">Recommended Solar Capacity</span>
+                <div id="calcCapKw" class="text-3xl font-black text-amber-400">3.0 kW</div>
+              </div>
+              <div class="text-right">
+                <span class="text-xs text-slate-400">Estimated Payback Period</span>
+                <div id="calcPaybackYears" class="text-3xl font-black text-emerald-400">2.8 Years</div>
+              </div>
+            </div>
+
+            <!-- Financial Matrix Grid -->
+            <div class="grid grid-cols-3 gap-3 mb-5">
+              <div class="bg-slate-900/60 p-3 rounded-2xl border border-slate-800 text-center">
+                <span class="text-[11px] text-slate-400 block mb-0.5">Gross EPC Cost</span>
+                <span id="calcGrossCapex" class="text-sm font-bold text-slate-200">₹1,56,000</span>
+              </div>
+              <div class="bg-emerald-950/30 p-3 rounded-2xl border border-emerald-500/30 text-center">
+                <span class="text-[11px] text-emerald-400 block mb-0.5">Govt. Subsidy</span>
+                <span id="calcSubsidy" class="text-sm font-extrabold text-emerald-300">₹78,000</span>
+              </div>
+              <div class="bg-cyan-950/30 p-3 rounded-2xl border border-cyan-500/30 text-center">
+                <span class="text-[11px] text-cyan-400 block mb-0.5">Net Cost to You</span>
+                <span id="calcNetCapex" class="text-sm font-extrabold text-white">₹78,000</span>
+              </div>
+            </div>
+
+            <!-- Generation and Savings Details -->
+            <div class="grid grid-cols-2 gap-4 text-xs mb-5">
+              <div class="space-y-2 bg-slate-900/40 p-3.5 rounded-2xl border border-slate-800/80">
+                <div class="flex justify-between">
+                  <span class="text-slate-400">Annual Clean Generation:</span>
+                  <span id="calcAnnualGen" class="font-bold text-white">4,620 kWh</span>
+                </div>
+                <div class="flex justify-between">
+                  <span class="text-slate-400">Monthly Average Units:</span>
+                  <span id="calcMonthlyGen" class="font-bold text-white">385 kWh</span>
+                </div>
+                <div class="flex justify-between">
+                  <span class="text-slate-400">Required Roof Footprint:</span>
+                  <span id="calcRoofArea" class="font-bold text-slate-300">300 sq.ft</span>
+                </div>
+              </div>
+              <div class="space-y-2 bg-slate-900/40 p-3.5 rounded-2xl border border-slate-800/80">
+                <div class="flex justify-between">
+                  <span class="text-slate-400">Annual Bill Savings:</span>
+                  <span id="calcAnnualSavings" class="font-bold text-emerald-400">₹28,182 / yr</span>
+                </div>
+                <div class="flex justify-between">
+                  <span class="text-slate-400">Monthly Bill Reduction:</span>
+                  <span id="calcMonthlySavings" class="font-bold text-emerald-400">₹2,349 / mo</span>
+                </div>
+                <div class="flex justify-between">
+                  <span class="text-slate-400">25-Yr Net Savings:</span>
+                  <span id="calcLifecycleSavings" class="font-extrabold text-amber-300">₹5,56,095</span>
+                </div>
+              </div>
+            </div>
+
+            <!-- Visual Payback Bar -->
+            <div class="mb-2">
+              <div class="flex justify-between text-xs text-slate-400 mb-1">
+                <span>Payback Timeline Breakeven (0 to 5 Years Scale)</span>
+                <span class="text-emerald-400 font-bold">Fast Capital Recovery</span>
+              </div>
+              <div class="w-full bg-slate-800 h-2.5 rounded-full overflow-hidden">
+                <div id="paybackProgressBar" class="h-full bg-gradient-to-r from-emerald-500 to-cyan-400 rounded-full transition-all duration-500" style="width: 56%"></div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Environmental & LiFE Point Footnote -->
+          <div class="pt-4 border-t border-slate-800/80 flex flex-wrap items-center justify-between text-xs text-slate-400 gap-2">
+            <div>
+              <span>🍃 Annual CO₂ Mitigated: <strong id="calcCo2Offset" class="text-cyan-300">3,308 kg/yr</strong></span>
+            </div>
+            <div>
+              <span>⭐ LiFE Points: <strong id="calcLifePoints" class="text-amber-300 font-bold">9,240 pts/yr</strong></span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Approved GEDA Vendors Sub-Section -->
+      <div id="vendors" class="mt-14 pt-10 border-t border-slate-800">
+        <div class="flex flex-col sm:flex-row sm:items-center justify-between mb-6 gap-2">
+          <div>
+            <h4 class="text-xl font-bold text-white flex items-center gap-2">
+              <span>🛡️</span> GEDA-Empanelled Solar Vendors & Installers
+            </h4>
+            <p class="text-xs text-slate-400">Verified tier-1 suppliers authorized for PM Surya Ghar subsidy disbursement</p>
+          </div>
+          <span class="text-xs text-emerald-400 font-semibold bg-emerald-950/40 px-3 py-1 rounded-full border border-emerald-500/30">
+            25-Year Warranty Guaranteed
+          </span>
+        </div>
+
+        <div id="vendorListContainer" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+          <!-- Dynamically populated by calculator.js -->
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- FEATURE 3: LiFE POINTS REWARD SYSTEM & GAMIFICATION -->
+  <section id="rewards" class="py-16 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 border-b border-slate-800/60">
+    <div class="text-center max-w-3xl mx-auto mb-10">
+      <div class="text-xs font-bold text-cyan-400 uppercase tracking-wider mb-1">Feature 3: Gamification & Rewards</div>
+      <h3 class="text-2xl sm:text-3xl font-extrabold text-white">Mission LiFE Citizen Rewards</h3>
+      <p class="text-sm text-slate-400 mt-2">
+        Earn verified LiFE points by shifting peak electricity consumption and adopting rooftop solar. Redeem points for Gujarat municipal utility benefits.
+      </p>
+    </div>
+
+    <div class="grid grid-cols-1 md:grid-cols-4 gap-6">
+      <div class="glass-card p-5 rounded-2xl border border-slate-800">
+        <div class="text-2xl mb-2">🥉</div>
+        <div class="text-sm font-bold text-slate-200 mb-1">Bronze Tier</div>
+        <div class="text-xs text-slate-400 mb-3">0 – 2,999 Points</div>
+        <p class="text-xs text-slate-400">Entry level for participating households actively shifting peak loads.</p>
+        <div class="mt-4 pt-3 border-t border-slate-800 text-xs text-emerald-400 font-medium">
+          ✓ Digital LiFE Green Badge
+        </div>
+      </div>
+
+      <div class="glass-card p-5 rounded-2xl border border-emerald-500/30 bg-emerald-950/10">
+        <div class="text-2xl mb-2">🥈</div>
+        <div class="text-sm font-bold text-emerald-300 mb-1">Silver Tier</div>
+        <div class="text-xs text-slate-400 mb-3">3,000 – 5,999 Points</div>
+        <p class="text-xs text-slate-400">Regular peak-shifters cutting evening appliance runtime by 25%+.</p>
+        <div class="mt-4 pt-3 border-t border-slate-800 text-xs text-emerald-400 font-medium">
+          ✓ 5% Municipal Tax Rebate
+        </div>
+      </div>
+
+      <div class="glass-card p-5 rounded-2xl border border-amber-500/30 bg-amber-950/10">
+        <div class="text-2xl mb-2">🥇</div>
+        <div class="text-sm font-bold text-amber-300 mb-1">Gold Tier</div>
+        <div class="text-xs text-slate-400 mb-3">6,000 – 9,999 Points</div>
+        <p class="text-xs text-slate-400">High-efficiency homes with solar rooftop installations or 50% shift.</p>
+        <div class="mt-4 pt-3 border-t border-slate-800 text-xs text-amber-300 font-medium">
+          ✓ 10% Tax Rebate + Free EV Charging
+        </div>
+      </div>
+
+      <div class="glass-card p-5 rounded-2xl border border-cyan-500/40 bg-cyan-950/20">
+        <div class="text-2xl mb-2">💎</div>
+        <div class="text-sm font-bold text-cyan-300 mb-1">Platinum Pioneer</div>
+        <div class="text-xs text-slate-400 mb-3">10,000+ Points</div>
+        <p class="text-xs text-slate-400">Net-zero prosumers powering community microgrids in Gujarat.</p>
+        <div class="mt-4 pt-3 border-t border-slate-800 text-xs text-cyan-300 font-medium">
+          ✓ GEDA State Sustainability Award
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- FOOTER -->
+  <footer class="py-12 bg-[#060a12] text-slate-400 text-xs">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-col md:flex-row items-center justify-between gap-6">
+      <div class="flex items-center space-x-3">
+        <div class="w-8 h-8 rounded-lg bg-emerald-500/20 border border-emerald-500/40 flex items-center justify-center font-bold text-emerald-400">
+          ⚡
+        </div>
+        <div>
+          <div class="text-slate-200 font-bold">Gujarat Energy Development Agency (GEDA)</div>
+          <div>Udyog Bhavan, Block No. 11 & 12, 4th Floor, Sector 11, Gandhinagar - 382017</div>
+        </div>
+      </div>
+
+      <div class="flex flex-wrap items-center gap-6">
+        <a href="#tracker" class="hover:text-white transition">Smart Tracker</a>
+        <a href="#solar" class="hover:text-white transition">Solar Calculator</a>
+        <a href="#vendors" class="hover:text-white transition">Vendors</a>
+        <a href="geda-admin.html" class="text-emerald-400 hover:text-emerald-300 font-bold transition">Admin Control Panel</a>
+      </div>
+
+      <div class="text-slate-500 text-center md:text-right">
+        GEDA Mission LiFE Platform • Phase 1–5 Release<br>
+        Open Data Grounded: UCI Electric Power & NASA POWER API
+      </div>
+    </div>
+  </footer>
+
+  <!-- SCRIPT INCLUSIONS -->
+  <script src="js/app.js"></script>
+  <script src="js/calculator.js"></script>
+</body>
+</html>

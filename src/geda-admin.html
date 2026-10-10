@@ -1,0 +1,223 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>GEDA Administrative Control Panel — District Transition Dashboard</title>
+  <meta name="description" content="Gujarat Energy Development Agency (GEDA) administrative dashboard for district-level renewable transition, peak load shaving, and solar target analytics.">
+  
+  <!-- Tailwind CSS CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  
+  <!-- Chart.js CDN -->
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+  <!-- Custom Stylesheet -->
+  <link rel="stylesheet" href="css/styles.css">
+</head>
+<body class="bg-[#090e1a] text-slate-100 min-h-screen selection:bg-emerald-500 selection:text-white">
+
+  <!-- TOP ADMIN SECURITY BAR -->
+  <div class="bg-slate-900 border-b border-slate-800 px-4 py-1.5 text-xs">
+    <div class="max-w-7xl mx-auto flex items-center justify-between">
+      <div class="flex items-center space-x-2 text-slate-400">
+        <span class="inline-block w-2 h-2 rounded-full bg-emerald-400"></span>
+        <span>GEDA State Energy Monitoring Network • SECURE DISCOM GATEWAY (UGVCL, PGVCL, DGVCL, MGVCL)</span>
+      </div>
+      <div class="flex items-center space-x-4 text-slate-400">
+        <span>Session: <strong class="text-slate-200">GEDA-OFFICIAL-AUTH</strong></span>
+        <a href="index.html" class="text-emerald-400 hover:text-emerald-300 font-semibold flex items-center gap-1">
+          ← Citizen Portal
+        </a>
+      </div>
+    </div>
+  </div>
+
+  <!-- ADMIN HEADER -->
+  <header class="glass-panel border-b border-slate-800/80 sticky top-0 z-50">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-18 flex items-center justify-between py-3">
+      <div class="flex items-center space-x-3">
+        <div class="w-10 h-10 rounded-xl bg-gradient-to-tr from-amber-500 to-emerald-400 p-0.5 flex items-center justify-center shadow-lg">
+          <div class="w-full h-full bg-[#090e1a] rounded-[10px] flex items-center justify-center font-bold text-amber-400 text-lg">
+            🏛️
+          </div>
+        </div>
+        <div>
+          <span class="text-xs tracking-wider text-amber-400 font-bold block uppercase">Govt. of Gujarat • State Energy Cell</span>
+          <h1 class="text-lg font-bold text-white tracking-tight leading-none">GEDA Mission LiFE Admin Control Panel</h1>
+        </div>
+      </div>
+
+      <div class="flex items-center space-x-3">
+        <button onclick="window.print()" class="hidden sm:flex items-center space-x-1.5 px-3 py-1.5 text-xs font-semibold rounded-lg bg-slate-800 hover:bg-slate-700 text-slate-200 border border-slate-700 transition">
+          <span>🖨️ Print Report</span>
+        </button>
+        <a href="index.html" class="px-3.5 py-1.5 text-xs font-semibold rounded-lg bg-emerald-600 hover:bg-emerald-500 text-white transition flex items-center gap-1.5">
+          <span>Citizen Portal</span>
+        </a>
+      </div>
+    </div>
+  </header>
+
+  <!-- MAIN ADMIN DASHBOARD BODY -->
+  <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+    
+    <!-- DASHBOARD TITLE & FILTERS -->
+    <div class="flex flex-col md:flex-row md:items-center justify-between mb-8 gap-4">
+      <div>
+        <div class="text-xs font-bold text-emerald-400 uppercase tracking-wider mb-1">Statewide Transition Oversight</div>
+        <h2 class="text-2xl sm:text-3xl font-extrabold text-white">District Renewable Energy Scorecard</h2>
+        <p class="text-xs text-slate-400 mt-1">Live tracking of PM Surya Ghar rooftop solar deployment and peak grid shaving potential across Gujarat.</p>
+      </div>
+
+      <div class="flex items-center space-x-2 text-xs">
+        <div class="glass-panel px-3 py-1.5 rounded-lg border border-slate-700 flex items-center gap-2">
+          <span class="text-slate-400">Status:</span>
+          <span class="font-bold text-emerald-400">All 5 Districts Active</span>
+        </div>
+        <div class="glass-panel px-3 py-1.5 rounded-lg border border-slate-700 flex items-center gap-2">
+          <span class="text-slate-400">Reporting Year:</span>
+          <span class="font-bold text-white">FY 2026-27</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- STATEWIDE MACRO KPI RIBBON -->
+    <div class="grid grid-cols-2 lg:grid-cols-6 gap-4 mb-8">
+      <div class="glass-card p-4 rounded-2xl border border-slate-800 col-span-2">
+        <div class="text-xs font-semibold text-slate-400 uppercase tracking-wider mb-1">Total Installed Solar</div>
+        <div id="adminTotalInstalledMw" class="text-3xl font-black text-white">765.5 MW</div>
+        <div class="mt-2">
+          <div class="flex justify-between text-[11px] text-slate-400 mb-1">
+            <span id="adminTargetProgress">75.4% of 1,015 MW Target</span>
+          </div>
+          <div class="w-full bg-slate-800 h-2 rounded-full overflow-hidden">
+            <div id="adminStateProgressBar" class="h-full bg-gradient-to-r from-emerald-500 to-cyan-400 rounded-full" style="width: 75.4%"></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="glass-card p-4 rounded-2xl border border-slate-800">
+        <div class="text-xs font-semibold text-slate-400 uppercase tracking-wider mb-1">Registered Prosumers</div>
+        <div id="adminTotalProsumers" class="text-2xl font-black text-cyan-400">215,040</div>
+        <div class="text-[10px] text-slate-500 mt-1">Residential Solar Roofs</div>
+      </div>
+
+      <div class="glass-card p-4 rounded-2xl border border-slate-800">
+        <div class="text-xs font-semibold text-slate-400 uppercase tracking-wider mb-1">Peak Shaving Capacity</div>
+        <div id="adminPeakShaveMw" class="text-2xl font-black text-amber-400">168.4 MW</div>
+        <div class="text-[10px] text-slate-500 mt-1">18:00–22:00 Dispatch</div>
+      </div>
+
+      <div class="glass-card p-4 rounded-2xl border border-slate-800">
+        <div class="text-xs font-semibold text-slate-400 uppercase tracking-wider mb-1">Clean Generation</div>
+        <div id="adminAnnualGwh" class="text-2xl font-black text-emerald-400">1,158.4 GWh</div>
+        <div class="text-[10px] text-slate-500 mt-1">Annual Clean Energy</div>
+      </div>
+
+      <div class="glass-card p-4 rounded-2xl border border-slate-800">
+        <div class="text-xs font-semibold text-slate-400 uppercase tracking-wider mb-1">State CO₂ Abated</div>
+        <div id="adminCo2Abated" class="text-2xl font-black text-slate-200">829,440 t</div>
+        <div class="text-[10px] text-slate-500 mt-1">Annual Metric Tonnes</div>
+      </div>
+    </div>
+
+    <!-- VISUAL ANALYTICS CHARTS GRID -->
+    <div class="grid grid-cols-1 lg:grid-cols-2 gap-8 mb-8">
+      <!-- Chart 1: Installed vs Target Capacity by District -->
+      <div class="glass-panel p-6 rounded-3xl border border-slate-800">
+        <div class="flex items-center justify-between mb-4">
+          <div>
+            <h3 class="text-base font-bold text-white">District Solar Capacity vs GEDA Target (MW)</h3>
+            <p class="text-xs text-slate-400">Installed rooftop capacity compared against 2026 state targets</p>
+          </div>
+        </div>
+        <div class="h-72 w-full relative">
+          <canvas id="districtProgressChart"></canvas>
+        </div>
+      </div>
+
+      <!-- Chart 2: 12-Month Generation Seasonality Curve -->
+      <div class="glass-panel p-6 rounded-3xl border border-slate-800">
+        <div class="flex items-center justify-between mb-4">
+          <div>
+            <h3 class="text-base font-bold text-white">12-Month Solar Generation Seasonality (MWh)</h3>
+            <p class="text-xs text-slate-400">Grounded in NASA POWER climatological irradiance trends</p>
+          </div>
+        </div>
+        <div class="h-72 w-full relative">
+          <canvas id="seasonalityChart"></canvas>
+        </div>
+      </div>
+    </div>
+
+    <!-- DISTRICT LEADERBOARD & SUSTAINABILITY TABLE -->
+    <div class="glass-panel rounded-3xl border border-slate-800 overflow-hidden mb-8">
+      <div class="p-6 border-b border-slate-800/80 flex flex-wrap items-center justify-between gap-4">
+        <div>
+          <h3 class="text-lg font-bold text-white flex items-center gap-2">
+            <span>🏆</span> District Sustainability Rankings & Performance Matrix
+          </h3>
+          <p class="text-xs text-slate-400">Ranked by percentage achievement against GEDA 2026 rooftop solar allocation</p>
+        </div>
+        <div class="text-xs text-slate-400">
+          Source: Verified Net-Metering DISCOM Interconnections
+        </div>
+      </div>
+
+      <div class="overflow-x-auto">
+        <table class="w-full text-left border-collapse">
+          <thead>
+            <tr class="border-b border-slate-800 text-[11px] font-semibold text-slate-400 uppercase tracking-wider bg-slate-900/50">
+              <th class="py-3 px-4">Rank</th>
+              <th class="py-3 px-4">District / Region</th>
+              <th class="py-3 px-4 text-right">Installed / Target</th>
+              <th class="py-3 px-4 text-right">Progress</th>
+              <th class="py-3 px-4 text-right">Prosumers</th>
+              <th class="py-3 px-4 text-right">Peak Shaving (MW)</th>
+              <th class="py-3 px-4 text-right">Annual Savings</th>
+              <th class="py-3 px-4 text-right">CO₂ Mitigated</th>
+            </tr>
+          </thead>
+          <tbody id="districtTableBody" class="divide-y divide-slate-800/40 text-xs">
+            <!-- Dynamically populated by admin.js -->
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- GRID PEAK MANAGEMENT & DISPATCH NOTICE -->
+    <div class="glass-panel p-6 rounded-3xl border border-amber-500/20 bg-gradient-to-r from-amber-950/20 via-slate-900/60 to-slate-900/80">
+      <div class="flex flex-col md:flex-row items-start md:items-center justify-between gap-4">
+        <div class="flex items-center space-x-4">
+          <div class="w-12 h-12 rounded-2xl bg-amber-500/20 border border-amber-500/40 flex items-center justify-center text-2xl">
+            ⚡
+          </div>
+          <div>
+            <h4 class="text-base font-bold text-white">Gujarat Grid Evening Peak Management Notice (18:00 – 22:00 IST)</h4>
+            <p class="text-xs text-slate-300 mt-0.5">
+              Current residential load-shifting and solar battery dispatch accounts for <strong>168.4 MW of peak shaving capacity</strong>.
+              District engineers are requested to mobilize citizen LiFE points incentives to cross the 200 MW milestone before Summer 2027.
+            </p>
+          </div>
+        </div>
+        <button onclick="alert('Exporting District Analytics Report (JSON/CSV) to local workstation.')" class="px-4 py-2 text-xs font-semibold rounded-xl bg-amber-600 hover:bg-amber-500 text-white transition whitespace-nowrap shadow-md shadow-amber-600/20">
+          Export Dispatch Log
+        </button>
+      </div>
+    </div>
+
+  </main>
+
+  <!-- ADMIN FOOTER -->
+  <footer class="py-8 border-t border-slate-800/80 mt-12 bg-[#060a12] text-slate-500 text-xs">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-col md:flex-row items-center justify-between gap-4">
+      <div>Gujarat Energy Development Agency (GEDA) • Administrative Energy Transition Control Panel</div>
+      <div>Grounded on NASA POWER Solar Irradiance & UCI Power Consumption Data</div>
+    </div>
+  </footer>
+
+  <!-- SCRIPT INCLUSIONS -->
+  <script src="js/admin.js"></script>
+</body>
+</html>

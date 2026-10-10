@@ -1,0 +1,21 @@
+# Environments and credentials
+.env
+credentials.json
+token.json
+.venv/
+venv/
+__pycache__/
+*.pyc
+
+# Temporary & intermediate processing files (regenerated per gemini.md)
+.tmp/
+
+# OS and editor files
+.DS_Store
+Thumbs.db
+.vscode/
+.idea/
+
+# Agent Skills Libraries
+.agent/
+.agents/

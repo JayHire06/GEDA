@@ -1,0 +1,426 @@
+{
+  "metadata": {
+    "platform": "GEDA Mission LiFE Administrative Control Panel",
+    "state": "Gujarat, India",
+    "last_updated": "2026-10-10",
+    "reporting_period": "FY 2026-27"
+  },
+  "statewide_summary": {
+    "total_districts_monitored": 5,
+    "total_installed_solar_mw": 765.5,
+    "total_target_solar_mw": 1015.0,
+    "state_achievement_pct": 75.4,
+    "total_registered_prosumers": 215040,
+    "annual_generation_gwh": 1158.44,
+    "annual_co2_abated_tonnes": 829439.8,
+    "total_peak_shaving_potential_mw": 168.41,
+    "statewide_life_points_issued": 2316871000
+  },
+  "districts": [
+    {
+      "district": "Rajkot",
+      "region_type": "Saurashtra Arid High-Solar Hub",
+      "coordinates": {
+        "lat": 22.3039,
+        "lon": 70.8022
+      },
+      "target_mw": 160.0,
+      "installed_mw": 128.5,
+      "achievement_pct": 80.3,
+      "active_prosumers": 36800,
+      "specific_yield_kwh_kwp": 1595.0,
+      "annual_generation_mwh": 204957.5,
+      "peak_shaving_capacity_mw": 28.27,
+      "annual_financial_savings_crores_inr": 125.02,
+      "annual_co2_mitigation_tonnes": 146749.6,
+      "total_life_points": 409915000,
+      "monthly_solar_profile": [
+        {
+          "month": "Jan",
+          "irradiance_wm2": 172,
+          "est_generation_mwh": 14688.6
+        },
+        {
+          "month": "Feb",
+          "irradiance_wm2": 201,
+          "est_generation_mwh": 17165.2
+        },
+        {
+          "month": "Mar",
+          "irradiance_wm2": 242,
+          "est_generation_mwh": 20666.5
+        },
+        {
+          "month": "Apr",
+          "irradiance_wm2": 275,
+          "est_generation_mwh": 23484.7
+        },
+        {
+          "month": "May",
+          "irradiance_wm2": 290,
+          "est_generation_mwh": 24765.7
+        },
+        {
+          "month": "Jun",
+          "irradiance_wm2": 238,
+          "est_generation_mwh": 20325.0
+        },
+        {
+          "month": "Jul",
+          "irradiance_wm2": 192,
+          "est_generation_mwh": 16396.6
+        },
+        {
+          "month": "Aug",
+          "irradiance_wm2": 184,
+          "est_generation_mwh": 15713.4
+        },
+        {
+          "month": "Sep",
+          "irradiance_wm2": 218,
+          "est_generation_mwh": 18617.0
+        },
+        {
+          "month": "Oct",
+          "irradiance_wm2": 230,
+          "est_generation_mwh": 19641.8
+        },
+        {
+          "month": "Nov",
+          "irradiance_wm2": 191,
+          "est_generation_mwh": 16311.2
+        },
+        {
+          "month": "Dec",
+          "irradiance_wm2": 162,
+          "est_generation_mwh": 13834.6
+        }
+      ],
+      "sustainability_rank": 1
+    },
+    {
+      "district": "Ahmedabad",
+      "region_type": "Metropolitan Megacity",
+      "coordinates": {
+        "lat": 23.0225,
+        "lon": 72.5714
+      },
+      "target_mw": 320.0,
+      "installed_mw": 245.8,
+      "achievement_pct": 76.8,
+      "active_prosumers": 68400,
+      "specific_yield_kwh_kwp": 1520.0,
+      "annual_generation_mwh": 373616.0,
+      "peak_shaving_capacity_mw": 54.08,
+      "annual_financial_savings_crores_inr": 227.91,
+      "annual_co2_mitigation_tonnes": 267509.1,
+      "total_life_points": 747232000,
+      "monthly_solar_profile": [
+        {
+          "month": "Jan",
+          "irradiance_wm2": 165,
+          "est_generation_mwh": 25686.1
+        },
+        {
+          "month": "Feb",
+          "irradiance_wm2": 192,
+          "est_generation_mwh": 29889.3
+        },
+        {
+          "month": "Mar",
+          "irradiance_wm2": 231,
+          "est_generation_mwh": 35960.5
+        },
+        {
+          "month": "Apr",
+          "irradiance_wm2": 264,
+          "est_generation_mwh": 41097.8
+        },
+        {
+          "month": "May",
+          "irradiance_wm2": 278,
+          "est_generation_mwh": 43277.2
+        },
+        {
+          "month": "Jun",
+          "irradiance_wm2": 226,
+          "est_generation_mwh": 35182.2
+        },
+        {
+          "month": "Jul",
+          "irradiance_wm2": 182,
+          "est_generation_mwh": 28332.5
+        },
+        {
+          "month": "Aug",
+          "irradiance_wm2": 174,
+          "est_generation_mwh": 27087.2
+        },
+        {
+          "month": "Sep",
+          "irradiance_wm2": 208,
+          "est_generation_mwh": 32380.1
+        },
+        {
+          "month": "Oct",
+          "irradiance_wm2": 220,
+          "est_generation_mwh": 34248.1
+        },
+        {
+          "month": "Nov",
+          "irradiance_wm2": 182,
+          "est_generation_mwh": 28332.5
+        },
+        {
+          "month": "Dec",
+          "irradiance_wm2": 155,
+          "est_generation_mwh": 24129.4
+        }
+      ],
+      "sustainability_rank": 2
+    },
+    {
+      "district": "Surat",
+      "region_type": "Commercial & Textile Hub",
+      "coordinates": {
+        "lat": 21.1702,
+        "lon": 72.8311
+      },
+      "target_mw": 260.0,
+      "installed_mw": 198.2,
+      "achievement_pct": 76.2,
+      "active_prosumers": 52100,
+      "specific_yield_kwh_kwp": 1460.0,
+      "annual_generation_mwh": 289372.0,
+      "peak_shaving_capacity_mw": 43.6,
+      "annual_financial_savings_crores_inr": 176.52,
+      "annual_co2_mitigation_tonnes": 207190.4,
+      "total_life_points": 578744000,
+      "monthly_solar_profile": [
+        {
+          "month": "Jan",
+          "irradiance_wm2": 160,
+          "est_generation_mwh": 19291.5
+        },
+        {
+          "month": "Feb",
+          "irradiance_wm2": 185,
+          "est_generation_mwh": 22305.8
+        },
+        {
+          "month": "Mar",
+          "irradiance_wm2": 222,
+          "est_generation_mwh": 26766.9
+        },
+        {
+          "month": "Apr",
+          "irradiance_wm2": 252,
+          "est_generation_mwh": 30384.1
+        },
+        {
+          "month": "May",
+          "irradiance_wm2": 265,
+          "est_generation_mwh": 31951.5
+        },
+        {
+          "month": "Jun",
+          "irradiance_wm2": 210,
+          "est_generation_mwh": 25320.0
+        },
+        {
+          "month": "Jul",
+          "irradiance_wm2": 165,
+          "est_generation_mwh": 19894.3
+        },
+        {
+          "month": "Aug",
+          "irradiance_wm2": 158,
+          "est_generation_mwh": 19050.3
+        },
+        {
+          "month": "Sep",
+          "irradiance_wm2": 195,
+          "est_generation_mwh": 23511.5
+        },
+        {
+          "month": "Oct",
+          "irradiance_wm2": 210,
+          "est_generation_mwh": 25320.0
+        },
+        {
+          "month": "Nov",
+          "irradiance_wm2": 175,
+          "est_generation_mwh": 21100.0
+        },
+        {
+          "month": "Dec",
+          "irradiance_wm2": 150,
+          "est_generation_mwh": 18085.8
+        }
+      ],
+      "sustainability_rank": 3
+    },
+    {
+      "district": "Vadodara",
+      "region_type": "Industrial & Cultural Core",
+      "coordinates": {
+        "lat": 22.3072,
+        "lon": 73.1812
+      },
+      "target_mw": 190.0,
+      "installed_mw": 134.6,
+      "achievement_pct": 70.8,
+      "active_prosumers": 39500,
+      "specific_yield_kwh_kwp": 1490.0,
+      "annual_generation_mwh": 200554.0,
+      "peak_shaving_capacity_mw": 29.61,
+      "annual_financial_savings_crores_inr": 122.34,
+      "annual_co2_mitigation_tonnes": 143596.7,
+      "total_life_points": 401108000,
+      "monthly_solar_profile": [
+        {
+          "month": "Jan",
+          "irradiance_wm2": 162,
+          "est_generation_mwh": 13537.4
+        },
+        {
+          "month": "Feb",
+          "irradiance_wm2": 188,
+          "est_generation_mwh": 15710.1
+        },
+        {
+          "month": "Mar",
+          "irradiance_wm2": 226,
+          "est_generation_mwh": 18885.5
+        },
+        {
+          "month": "Apr",
+          "irradiance_wm2": 258,
+          "est_generation_mwh": 21559.6
+        },
+        {
+          "month": "May",
+          "irradiance_wm2": 272,
+          "est_generation_mwh": 22729.5
+        },
+        {
+          "month": "Jun",
+          "irradiance_wm2": 218,
+          "est_generation_mwh": 18217.0
+        },
+        {
+          "month": "Jul",
+          "irradiance_wm2": 174,
+          "est_generation_mwh": 14540.2
+        },
+        {
+          "month": "Aug",
+          "irradiance_wm2": 166,
+          "est_generation_mwh": 13871.7
+        },
+        {
+          "month": "Sep",
+          "irradiance_wm2": 202,
+          "est_generation_mwh": 16880.0
+        },
+        {
+          "month": "Oct",
+          "irradiance_wm2": 215,
+          "est_generation_mwh": 17966.3
+        },
+        {
+          "month": "Nov",
+          "irradiance_wm2": 178,
+          "est_generation_mwh": 14874.4
+        },
+        {
+          "month": "Dec",
+          "irradiance_wm2": 152,
+          "est_generation_mwh": 12701.8
+        }
+      ],
+      "sustainability_rank": 4
+    },
+    {
+      "district": "Gandhinagar",
+      "region_type": "Administrative Capital",
+      "coordinates": {
+        "lat": 23.2156,
+        "lon": 72.6369
+      },
+      "target_mw": 85.0,
+      "installed_mw": 58.4,
+      "achievement_pct": 68.7,
+      "active_prosumers": 18240,
+      "specific_yield_kwh_kwp": 1540.0,
+      "annual_generation_mwh": 89936.0,
+      "peak_shaving_capacity_mw": 12.85,
+      "annual_financial_savings_crores_inr": 54.86,
+      "annual_co2_mitigation_tonnes": 64394.2,
+      "total_life_points": 179872000,
+      "monthly_solar_profile": [
+        {
+          "month": "Jan",
+          "irradiance_wm2": 168,
+          "est_generation_mwh": 6295.5
+        },
+        {
+          "month": "Feb",
+          "irradiance_wm2": 195,
+          "est_generation_mwh": 7307.3
+        },
+        {
+          "month": "Mar",
+          "irradiance_wm2": 235,
+          "est_generation_mwh": 8806.2
+        },
+        {
+          "month": "Apr",
+          "irradiance_wm2": 268,
+          "est_generation_mwh": 10042.9
+        },
+        {
+          "month": "May",
+          "irradiance_wm2": 282,
+          "est_generation_mwh": 10567.5
+        },
+        {
+          "month": "Jun",
+          "irradiance_wm2": 230,
+          "est_generation_mwh": 8618.9
+        },
+        {
+          "month": "Jul",
+          "irradiance_wm2": 185,
+          "est_generation_mwh": 6932.6
+        },
+        {
+          "month": "Aug",
+          "irradiance_wm2": 178,
+          "est_generation_mwh": 6670.3
+        },
+        {
+          "month": "Sep",
+          "irradiance_wm2": 212,
+          "est_generation_mwh": 7944.3
+        },
+        {
+          "month": "Oct",
+          "irradiance_wm2": 224,
+          "est_generation_mwh": 8394.0
+        },
+        {
+          "month": "Nov",
+          "irradiance_wm2": 186,
+          "est_generation_mwh": 6970.0
+        },
+        {
+          "month": "Dec",
+          "irradiance_wm2": 158,
+          "est_generation_mwh": 5920.8
+        }
+      ],
+      "sustainability_rank": 5
+    }
+  ]
+}
