@@ -1,20 +1,22 @@
 /**
  * src/js/cyera_flow.js
- * 60fps Cyera AI Guardian 4-State UI State Machine & 7 LiFE Spaceship Cockpit Engine
- * Powered by Three.js (Textured Earth Globe) & GSAP
+ * Zero-Lag Flow AI Video State Machine Engine & 7 LiFE Cockpit Viewport
+ * Powered by Hardware-Accelerated Video Decoding & GSAP Transitions
  */
 
 class CyeraFlowController {
   constructor() {
-    this.currentState = 0; // 0: Hero, 1: Orbit Intro, 2: Cockpit, 3: Main App
+    this.currentState = 0; // 0: Hero, 1: Orbital Shift, 2: Cockpit, 3: Main App
     this.currentCardIndex = 0;
     this.totalCards = 7;
-    this.animFrameId = null;
-    this.isRendering = false;
-    this.mouseX = 0;
-    this.mouseY = 0;
-    this.targetMouseX = 0;
-    this.targetMouseY = 0;
+    this.isTransitioning = false;
+
+    // Video assets mapped to states
+    this.stateVideos = {
+      0: "assets/earth_hero_loop.mp4",
+      1: "assets/earth_orbital_shift.mp4",
+      2: "assets/cockpit_view.mp4"
+    };
 
     // 7 Mission LiFE categories dataset
     this.lifeThemes = [
@@ -115,326 +117,85 @@ class CyeraFlowController {
   }
 
   init() {
-    this.initThreeJs();
-    this.setupEventListeners();
+    this.videoElement = document.getElementById("cyeraBgVideo");
     this.renderThemeCards();
-    this.setState(0);
-    this.startRenderLoop();
+    this.setupEventListeners();
+    this.setupMouseParallax();
+    this.setState(0, true);
   }
 
   /* -------------------------------------------------------------
-   * THREE.JS TEXTURED EARTH & BACKGROUND ENGINE
+   * 4-STATE MACHINE TRANSITIONS & VIDEO CONTROLLER
    * ------------------------------------------------------------- */
-  initThreeJs() {
-    const canvas = document.getElementById("cyeraCanvas");
-    if (!canvas || typeof THREE === "undefined") {
-      console.warn("[CyeraFlow] Three.js or #cyeraCanvas not available.");
-      return;
-    }
-
-    this.scene = new THREE.Scene();
-    this.scene.fog = new THREE.FogExp2(0x0b0618, 0.001);
-
-    this.camera = new THREE.PerspectiveCamera(45, window.innerWidth / window.innerHeight, 0.1, 1000);
-    this.camera.position.set(0, 0, 7.5);
-
-    this.renderer = new THREE.WebGLRenderer({
-      canvas: canvas,
-      antialias: true,
-      alpha: true,
-      powerPreference: "high-performance"
-    });
-    this.renderer.setSize(window.innerWidth, window.innerHeight);
-    this.renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
-
-    // Lighting: Sun + Ambient Earth glow
-    const ambientLight = new THREE.AmbientLight(0x2d2b55, 1.4);
-    this.scene.add(ambientLight);
-
-    this.sunLight = new THREE.DirectionalLight(0xffffff, 2.2);
-    this.sunLight.position.set(6, 3, 5);
-    this.scene.add(this.sunLight);
-
-    const rimLight = new THREE.DirectionalLight(0x38bdf8, 1.2);
-    rimLight.position.set(-6, -2, -2);
-    this.scene.add(rimLight);
-
-    // Textured Earth Globe
-    const globeGeometry = new THREE.SphereGeometry(2.1, 64, 64);
-    
-    // Texture loader with procedural fallback
-    const textureLoader = new THREE.TextureLoader();
-    let earthTexture;
-    try {
-      earthTexture = textureLoader.load(
-        'assets/earth_texture.jpg',
-        () => {
-          this.renderer.render(this.scene, this.camera);
-        },
-        undefined,
-        () => {
-          console.warn("[CyeraFlow] Earth texture load error; using procedural fallback texture.");
-          this.globeMaterial.map = this.createFallbackEarthTexture();
-          this.globeMaterial.needsUpdate = true;
-        }
-      );
-    } catch (e) {
-      earthTexture = this.createFallbackEarthTexture();
-    }
-
-    this.globeMaterial = new THREE.MeshStandardMaterial({
-      map: earthTexture,
-      roughness: 0.7,
-      metalness: 0.1,
-      bumpScale: 0.05
-    });
-
-    this.earthGlobe = new THREE.Mesh(globeGeometry, this.globeMaterial);
-    this.scene.add(this.earthGlobe);
-
-    // Atmospheric Glow Shell
-    const glowGeo = new THREE.SphereGeometry(2.16, 64, 64);
-    const glowMat = new THREE.MeshBasicMaterial({
-      color: 0x38bdf8,
-      transparent: true,
-      opacity: 0.18,
-      side: THREE.BackSide,
-      blending: THREE.AdditiveBlending
-    });
-    this.atmosphereGlow = new THREE.Mesh(glowGeo, glowMat);
-    this.earthGlobe.add(this.atmosphereGlow);
-
-    // Orbital Energy Rings
-    const ringGeo = new THREE.RingGeometry(2.6, 2.65, 96);
-    const ringMat = new THREE.MeshBasicMaterial({
-      color: 0x10b981,
-      side: THREE.DoubleSide,
-      transparent: true,
-      opacity: 0.35,
-      blending: THREE.AdditiveBlending
-    });
-    this.orbitRing1 = new THREE.Mesh(ringGeo, ringMat);
-    this.orbitRing1.rotation.x = Math.PI / 2.3;
-    this.orbitRing1.rotation.y = Math.PI / 8;
-    this.earthGlobe.add(this.orbitRing1);
-
-    const ringGeo2 = new THREE.RingGeometry(3.1, 3.14, 96);
-    const ringMat2 = new THREE.MeshBasicMaterial({
-      color: 0xa855f7,
-      side: THREE.DoubleSide,
-      transparent: true,
-      opacity: 0.25,
-      blending: THREE.AdditiveBlending
-    });
-    this.orbitRing2 = new THREE.Mesh(ringGeo2, ringMat2);
-    this.orbitRing2.rotation.x = Math.PI / 1.7;
-    this.orbitRing2.rotation.y = -Math.PI / 6;
-    this.earthGlobe.add(this.orbitRing2);
-
-    // Cosmic Dust / Star Field
-    const starCount = 600;
-    const starGeo = new THREE.BufferGeometry();
-    const starPositions = new Float32Array(starCount * 3);
-    for (let i = 0; i < starCount * 3; i += 3) {
-      starPositions[i] = (Math.random() - 0.5) * 40;
-      starPositions[i + 1] = (Math.random() - 0.5) * 40;
-      starPositions[i + 2] = (Math.random() - 0.5) * 40;
-    }
-    starGeo.setAttribute('position', new THREE.BufferAttribute(starPositions, 3));
-    const starMat = new THREE.PointsMaterial({
-      color: 0xffffff,
-      size: 0.08,
-      transparent: true,
-      opacity: 0.75
-    });
-    this.starPoints = new THREE.Points(starGeo, starMat);
-    this.scene.add(this.starPoints);
-
-    // Resize handler
-    window.addEventListener("resize", () => {
-      if (!this.camera || !this.renderer) return;
-      this.camera.aspect = window.innerWidth / window.innerHeight;
-      this.camera.updateProjectionMatrix();
-      this.renderer.setSize(window.innerWidth, window.innerHeight);
-    });
-  }
-
-  createFallbackEarthTexture() {
-    const canvas = document.createElement("canvas");
-    canvas.width = 1024;
-    canvas.height = 512;
-    const ctx = canvas.getContext("2d");
-    
-    // Deep ocean
-    const gradient = ctx.createLinearGradient(0, 0, 0, 512);
-    gradient.addColorStop(0, "#081b3a");
-    gradient.addColorStop(0.5, "#0d2b56");
-    gradient.addColorStop(1, "#071830");
-    ctx.fillStyle = gradient;
-    ctx.fillRect(0, 0, 1024, 512);
-
-    // Continents procedural patches
-    ctx.fillStyle = "#1e5b38";
-    for (let i = 0; i < 40; i++) {
-      const cx = Math.random() * 1024;
-      const cy = Math.random() * 512;
-      const r = 20 + Math.random() * 60;
-      ctx.beginPath();
-      ctx.arc(cx, cy, r, 0, Math.PI * 2);
-      ctx.fill();
-    }
-
-    // Clouds
-    ctx.fillStyle = "rgba(255, 255, 255, 0.25)";
-    for (let i = 0; i < 30; i++) {
-      const cx = Math.random() * 1024;
-      const cy = Math.random() * 512;
-      ctx.fillRect(cx, cy, 70 + Math.random() * 100, 15 + Math.random() * 25);
-    }
-
-    return new THREE.CanvasTexture(canvas);
-  }
-
-  /* -------------------------------------------------------------
-   * RENDER LOOP & PERFORMANCE CONTROL
-   * ------------------------------------------------------------- */
-  startRenderLoop() {
-    if (this.isRendering) return;
-    this.isRendering = true;
-
-    const render = () => {
-      if (!this.isRendering) return;
-
-      // Slow earth rotation
-      if (this.earthGlobe) {
-        this.earthGlobe.rotation.y += 0.0025;
-      }
-      if (this.orbitRing1) this.orbitRing1.rotation.z += 0.004;
-      if (this.orbitRing2) this.orbitRing2.rotation.z -= 0.003;
-
-      // Smooth mouse-parallax interpolation
-      this.mouseX += (this.targetMouseX - this.mouseX) * 0.05;
-      this.mouseY += (this.targetMouseY - this.mouseY) * 0.05;
-
-      if (this.camera) {
-        this.camera.position.x = this.mouseX * 0.4;
-        this.camera.position.y = -this.mouseY * 0.3;
-        this.camera.lookAt(0, 0, 0);
-      }
-
-      if (this.renderer && this.scene && this.camera) {
-        this.renderer.render(this.scene, this.camera);
-      }
-
-      this.animFrameId = requestAnimationFrame(render);
-    };
-
-    render();
-  }
-
-  pauseRenderLoop() {
-    this.isRendering = false;
-    if (this.animFrameId) {
-      cancelAnimationFrame(this.animFrameId);
-      this.animFrameId = null;
-    }
-    console.log("[CyeraFlow] Render loop paused for zero CPU/GPU overhead.");
-  }
-
-  resumeRenderLoop() {
-    if (!this.isRendering) {
-      console.log("[CyeraFlow] Resuming 60fps render loop.");
-      this.startRenderLoop();
-    }
-  }
-
-  /* -------------------------------------------------------------
-   * 4-STATE MACHINE TRANSITIONS
-   * ------------------------------------------------------------- */
-  setState(targetState) {
+  setState(targetState, force = false) {
+    if (this.currentState === targetState && !force) return;
     this.currentState = targetState;
-    console.log(`[CyeraFlow] Transitioning to State ${targetState}`);
+    console.log(`[CyeraFlow] Setting State: ${targetState}`);
 
     const container = document.getElementById("cyeraExperience");
     if (!container) return;
 
-    // Reset state classes
+    // Update state classes
     container.classList.remove("state-0", "state-1", "state-2", "state-3");
     container.classList.add(`state-${targetState}`);
 
-    // Update global body scroll lock
+    // Update body scroll lock
     if (targetState === 3) {
       document.body.classList.remove("overflow-hidden");
-      this.pauseRenderLoop();
+      this.pauseVideo();
+      const mainApp = document.getElementById("mainAppContainer");
+      if (mainApp) {
+        mainApp.scrollIntoView({ behavior: "smooth" });
+      }
     } else {
       document.body.classList.add("overflow-hidden");
-      this.resumeRenderLoop();
+      this.switchVideoForState(targetState);
+    }
+  }
+
+  switchVideoForState(state) {
+    if (!this.videoElement) return;
+
+    const nextSrc = this.stateVideos[state];
+    if (!nextSrc) return;
+
+    // Check if current video source is already this target
+    const currentSrcAttr = this.videoElement.getAttribute("src") || "";
+    if (currentSrcAttr.endsWith(nextSrc)) {
+      this.videoElement.play().catch(() => {});
+      return;
     }
 
-    // GSAP 3D Camera / Globe choreography
-    if (this.earthGlobe && typeof gsap !== "undefined") {
-      const isMobile = window.innerWidth < 768;
-
-      if (targetState === 0) {
-        // State 0: Globe Centered, Full view
-        gsap.to(this.earthGlobe.position, {
-          x: 0,
-          y: isMobile ? 0.4 : 0,
-          z: 0,
-          duration: 1.4,
-          ease: "power3.out"
+    // Smooth opacity cross-fade
+    this.videoElement.style.opacity = "0.2";
+    setTimeout(() => {
+      this.videoElement.src = nextSrc;
+      this.videoElement.load();
+      const playPromise = this.videoElement.play();
+      if (playPromise !== undefined) {
+        playPromise.catch((err) => {
+          console.warn("[CyeraFlow] Video autoplay prevented or paused:", err);
         });
-        gsap.to(this.earthGlobe.scale, {
-          x: 1,
-          y: 1,
-          z: 1,
-          duration: 1.4,
-          ease: "power3.out"
-        });
-      } else if (targetState === 1) {
-        // State 1: Globe translated to left (-30% projection)
-        gsap.to(this.earthGlobe.position, {
-          x: isMobile ? 0 : -2.3,
-          y: isMobile ? 1.6 : 0,
-          z: 0.2,
-          duration: 1.5,
-          ease: "power3.out"
-        });
-        gsap.to(this.earthGlobe.scale, {
-          x: isMobile ? 0.75 : 0.88,
-          y: isMobile ? 0.75 : 0.88,
-          z: isMobile ? 0.75 : 0.88,
-          duration: 1.5,
-          ease: "power3.out"
-        });
-      } else if (targetState === 2) {
-        // State 2: Cockpit view; Globe centered slightly deep in viewport
-        gsap.to(this.earthGlobe.position, {
-          x: 0,
-          y: isMobile ? -0.2 : 0,
-          z: -1.2,
-          duration: 1.6,
-          ease: "power3.out"
-        });
-        gsap.to(this.earthGlobe.scale, {
-          x: 0.78,
-          y: 0.78,
-          z: 0.78,
-          duration: 1.6,
-          ease: "power3.out"
-        });
-      } else if (targetState === 3) {
-        // State 3: Main App revealed, smoothly fade out scene
-        const mainApp = document.getElementById("mainAppContainer");
-        if (mainApp) {
-          mainApp.scrollIntoView({ behavior: "smooth" });
-        }
       }
+      this.videoElement.style.opacity = "1";
+    }, 250);
+  }
+
+  pauseVideo() {
+    if (this.videoElement && !this.videoElement.paused) {
+      this.videoElement.pause();
+      console.log("[CyeraFlow] Video paused for zero background CPU overhead.");
+    }
+  }
+
+  resumeVideo() {
+    if (this.videoElement && this.videoElement.paused && this.currentState !== 3) {
+      this.videoElement.play().catch(() => {});
     }
   }
 
   /* -------------------------------------------------------------
-   * 7 MISSION LiFE COCKPIT CARDS LOGIC
+   * 7 MISSION LiFE COCKPIT CARDS
    * ------------------------------------------------------------- */
   renderThemeCards() {
     const cardMount = document.getElementById("cockpitCardMount");
@@ -445,7 +206,7 @@ class CyeraFlowController {
     if (dotsMount) dotsMount.innerHTML = "";
 
     this.lifeThemes.forEach((theme, idx) => {
-      // 3D Card
+      // Frosted Glass Card
       const card = document.createElement("div");
       card.className = `cockpit-theme-card absolute inset-0 transition-all duration-500 transform ${
         idx === 0 ? "active-card opacity-100 scale-100 pointer-events-auto" : "opacity-0 scale-95 pointer-events-none"
@@ -453,12 +214,12 @@ class CyeraFlowController {
       card.dataset.index = idx;
 
       card.innerHTML = `
-        <div class="h-full w-full rounded-2xl p-6 sm:p-8 bg-gradient-to-b from-slate-900/90 via-[#150a2e]/95 to-[#0b0518]/95 border border-purple-500/30 shadow-2xl backdrop-blur-xl flex flex-col justify-between relative overflow-hidden">
-          <!-- Top Glow Accent -->
-          <div class="absolute -top-12 -right-12 w-40 h-40 bg-gradient-to-br ${theme.color} opacity-20 rounded-full blur-2xl pointer-events-none"></div>
+        <div class="h-full w-full rounded-2xl p-6 sm:p-8 bg-gradient-to-b from-slate-900/85 via-[#150a2e]/90 to-[#0b0518]/95 border border-purple-500/30 shadow-2xl backdrop-blur-xl flex flex-col justify-between relative overflow-hidden">
+          <!-- Top Accent Light -->
+          <div class="absolute -top-12 -right-12 w-44 h-44 bg-gradient-to-br ${theme.color} opacity-25 rounded-full blur-2xl pointer-events-none"></div>
           
           <div>
-            <!-- Header Tag & Number -->
+            <!-- Header Tag & Step -->
             <div class="flex items-center justify-between mb-4">
               <span class="text-[11px] font-bold px-3 py-1 rounded-full uppercase tracking-wider border ${theme.badgeBg}">
                 ${theme.tag}
@@ -467,8 +228,8 @@ class CyeraFlowController {
             </div>
 
             <!-- Title & Icon -->
-            <div class="flex items-center space-x-3 mb-2">
-              <span class="text-3xl">${theme.icon}</span>
+            <div class="flex items-center space-x-3.5 mb-2">
+              <span class="text-3xl sm:text-4xl filter drop-shadow">${theme.icon}</span>
               <div>
                 <h3 class="text-xl sm:text-2xl font-black text-white tracking-tight">${theme.title}</h3>
                 <p class="text-xs font-medium text-purple-300">${theme.subtitle}</p>
@@ -481,17 +242,17 @@ class CyeraFlowController {
             </p>
           </div>
 
-          <!-- Metrics Panel -->
-          <div class="bg-black/40 rounded-xl p-3.5 border border-white/10 space-y-2">
+          <!-- Impact Metrics Panel -->
+          <div class="bg-black/45 rounded-xl p-3.5 border border-white/10 space-y-2 backdrop-blur-md">
             <div class="flex items-center justify-between text-xs">
               <span class="text-slate-400">Gujarat Impact:</span>
               <span class="font-bold text-emerald-400 font-mono">${theme.metric}</span>
             </div>
             <div class="flex items-center justify-between text-xs">
-              <span class="text-slate-400">Statewide Goal:</span>
+              <span class="text-slate-400">Statewide Target:</span>
               <span class="font-bold text-cyan-300 font-mono">${theme.target}</span>
             </div>
-            <div class="text-[11px] text-amber-300/90 pt-1 border-t border-white/5 flex items-center gap-1.5">
+            <div class="text-[11px] text-amber-300/95 pt-1 border-t border-white/5 flex items-center gap-1.5">
               <span>💡</span>
               <span>${theme.tip}</span>
             </div>
@@ -555,24 +316,24 @@ class CyeraFlowController {
   }
 
   /* -------------------------------------------------------------
-   * EVENT LISTENERS & MOUSE PARALLAX
+   * MOUSE PARALLAX & EVENT LISTENERS
    * ------------------------------------------------------------- */
-  setupEventListeners() {
-    // Mouse Parallax for Cockpit Frame & Three.js camera
+  setupMouseParallax() {
     window.addEventListener("mousemove", (e) => {
-      this.targetMouseX = (e.clientX / window.innerWidth) * 2 - 1;
-      this.targetMouseY = (e.clientY / window.innerHeight) * 2 - 1;
-
-      // Cockpit Viewport tilt (±5 degrees)
       const cockpitViewport = document.getElementById("cockpitViewport");
-      if (cockpitViewport && this.currentState === 2) {
-        const tiltX = -this.targetMouseY * 5;
-        const tiltY = this.targetMouseX * 5;
-        cockpitViewport.style.transform = `perspective(1000px) rotateX(${tiltX}deg) rotateY(${tiltY}deg)`;
-      }
-    });
+      if (!cockpitViewport || this.currentState !== 2) return;
 
-    // Keyboard Arrow navigation for Cockpit Cards
+      const normX = (e.clientX / window.innerWidth) * 2 - 1;
+      const normY = (e.clientY / window.innerHeight) * 2 - 1;
+
+      const tiltX = -normY * 5;
+      const tiltY = normX * 5;
+      cockpitViewport.style.transform = `perspective(1000px) rotateX(${tiltX}deg) rotateY(${tiltY}deg)`;
+    });
+  }
+
+  setupEventListeners() {
+    // Keyboard Navigation
     window.addEventListener("keydown", (e) => {
       if (this.currentState === 2) {
         if (e.key === "ArrowRight") this.nextCard();
@@ -622,14 +383,12 @@ class CyeraFlowController {
       btnSkipToApp.addEventListener("click", () => this.setState(3));
     }
 
-    // Scroll resume trigger: if user scrolls back to the very top, resume render
+    // Scroll resume trigger: resume video when scrolling back to the very top
     window.addEventListener("scroll", () => {
-      if (window.scrollY < 120 && this.currentState === 3) {
-        // User scrolled back to top
-        this.resumeRenderLoop();
-      } else if (window.scrollY > 300 && this.isRendering) {
-        // User scrolled down into portal
-        this.pauseRenderLoop();
+      if (window.scrollY < 80 && this.currentState === 3) {
+        this.resumeVideo();
+      } else if (window.scrollY > 200 && this.currentState === 3) {
+        this.pauseVideo();
       }
     }, { passive: true });
   }
