@@ -27,8 +27,174 @@
 </head>
 <body class="bg-[#080512] text-slate-100 min-h-screen selection:bg-emerald-500 selection:text-white relative">
 
-  <!-- 3D WEBGL BACKGROUND CANVAS -->
-  <canvas id="bg3dCanvas"></canvas>
+  <!-- CYERA AI GUARDIAN 4-STATE ENGINE VIEWPORT OVERLAY -->
+  <div id="cyeraExperience" class="cyera-experience state-0">
+    <!-- WebGL Textured Earth & Space Scene -->
+    <canvas id="cyeraCanvas"></canvas>
+
+    <!-- TOP HUD & STATE PROGRESS INDICATOR -->
+    <div class="relative z-30 w-full px-6 py-4 flex items-center justify-between pointer-events-auto">
+      <div class="flex items-center space-x-3">
+        <div class="h-9 w-9 rounded-lg overflow-hidden border border-emerald-500/40 bg-white p-0.5 shadow-md flex items-center justify-center">
+          <img src="assets/geda_logo.jpg" alt="GEDA Crest" class="h-full w-full object-contain">
+        </div>
+        <div>
+          <span class="text-[10px] tracking-wider text-emerald-400 font-extrabold uppercase block leading-tight">Gujarat Energy Development Agency</span>
+          <span class="text-xs font-bold text-white tracking-wide">Mission LiFE AI Guardian</span>
+        </div>
+      </div>
+
+      <!-- State Progress Indicator -->
+      <div class="hidden md:flex items-center space-x-2 text-[11px] font-mono bg-black/50 border border-white/10 rounded-full px-4 py-1.5 backdrop-blur-md">
+        <span class="text-slate-500">STAGE:</span>
+        <button onclick="window.cyeraFlow && window.cyeraFlow.setState(0)" class="text-emerald-400 font-bold hover:underline">01 LAUNCH</button>
+        <span class="text-slate-600">→</span>
+        <button onclick="window.cyeraFlow && window.cyeraFlow.setState(1)" class="text-cyan-300 font-bold hover:underline">02 ORBIT</button>
+        <span class="text-slate-600">→</span>
+        <button onclick="window.cyeraFlow && window.cyeraFlow.setState(2)" class="text-purple-300 font-bold hover:underline">03 COCKPIT</button>
+      </div>
+
+      <!-- Skip / Direct Access to Portal -->
+      <button id="btnSkipToApp" class="px-3.5 py-1.5 text-xs font-bold rounded-xl bg-slate-800/80 hover:bg-slate-700 text-slate-200 border border-slate-700 transition flex items-center gap-1.5 backdrop-blur-md shadow-lg">
+        <span>Skip to Portal</span>
+        <span>→</span>
+      </button>
+    </div>
+
+    <!-- STATE 0: HERO STAGE -->
+    <div id="stageHero" class="cyera-stage z-20 flex-1 flex flex-col items-center justify-center text-center px-4">
+      <div class="max-w-3xl mx-auto space-y-6">
+        <div class="inline-flex items-center space-x-2 px-4 py-1.5 rounded-full bg-purple-950/70 border border-purple-500/40 text-purple-200 text-xs font-semibold backdrop-blur-md shadow-lg">
+          <span class="inline-block w-2 h-2 rounded-full bg-emerald-400 animate-pulse"></span>
+          <span>GUJARAT ENERGY TRANSITION • MISSION LiFE</span>
+        </div>
+
+        <h1 class="text-4xl sm:text-6xl md:text-7xl font-black text-white tracking-tight leading-none">
+          Gujarat Energy <br>
+          <span class="gradient-text-green">Transition</span>
+        </h1>
+
+        <p class="text-sm sm:text-base text-slate-300 max-w-xl mx-auto leading-relaxed">
+          AI-driven peak-shifting, NASA-grounded rooftop solar feasibility, and gamified Mission LiFE vouchers for prosumers across Gujarat.
+        </p>
+
+        <div class="pt-4 flex flex-col sm:flex-row items-center justify-center gap-4">
+          <button id="btnBeginMission" class="px-8 py-4 text-sm sm:text-base font-extrabold rounded-2xl bg-gradient-to-r from-emerald-500 via-teal-500 to-cyan-500 hover:from-emerald-400 hover:to-cyan-400 text-slate-950 transition-all duration-300 transform hover:scale-105 shadow-xl shadow-emerald-500/30 flex items-center gap-3">
+            <span>Begin Your Mission</span>
+            <span class="text-lg">🚀</span>
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- STATE 1: ORBIT INTRO STAGE -->
+    <div id="stageOrbit" class="cyera-stage z-20 flex-1 flex items-center justify-end px-6 sm:px-12 lg:px-20">
+      <!-- Spinning SVG Orbital Target Rings around Earth (Left Center) -->
+      <div class="absolute left-4 sm:left-12 lg:left-24 top-1/2 -translate-y-1/2 w-72 h-72 sm:w-96 sm:h-96 lg:w-[480px] lg:h-[480px] pointer-events-none flex items-center justify-center">
+        <!-- Outer Ring with coordinates -->
+        <svg class="absolute inset-0 w-full h-full spin-orbit-slow opacity-60" viewBox="0 0 400 400">
+          <circle cx="200" cy="200" r="185" fill="none" stroke="#38bdf8" stroke-width="1.5" stroke-dasharray="12 8" />
+          <circle cx="200" cy="200" r="155" fill="none" stroke="#10b981" stroke-width="1" stroke-dasharray="4 16" />
+        </svg>
+        <!-- Reverse Inner Reticle -->
+        <svg class="absolute inset-0 w-full h-full spin-orbit-reverse opacity-50" viewBox="0 0 400 400">
+          <circle cx="200" cy="200" r="130" fill="none" stroke="#c084fc" stroke-width="2" stroke-dasharray="24 12 6 12" />
+          <line x1="200" y1="20" x2="200" y2="50" stroke="#38bdf8" stroke-width="2" />
+          <line x1="200" y1="350" x2="200" y2="380" stroke="#38bdf8" stroke-width="2" />
+          <line x1="20" y1="200" x2="50" y2="200" stroke="#38bdf8" stroke-width="2" />
+          <line x1="350" y1="200" x2="380" y2="200" stroke="#38bdf8" stroke-width="2" />
+        </svg>
+        <!-- Target Center Reticle -->
+        <div class="w-16 h-16 rounded-full border border-cyan-400/50 flex items-center justify-center animate-ping opacity-25"></div>
+      </div>
+
+      <!-- Right-Aligned Mission Briefing Panel -->
+      <div class="relative z-20 max-w-lg w-full glass-panel p-8 sm:p-10 rounded-3xl border border-cyan-500/30 shadow-2xl backdrop-blur-2xl">
+        <div class="flex items-center space-x-2 text-[11px] font-mono text-cyan-400 font-bold mb-3 tracking-wider uppercase">
+          <span class="inline-block w-2 h-2 rounded-full bg-cyan-400 animate-pulse"></span>
+          <span>Orbital Telemetry • Grid Defense</span>
+        </div>
+
+        <h2 class="text-2xl sm:text-3xl font-black text-white tracking-tight leading-tight mb-4">
+          Your Mission: <br>
+          <span class="gradient-text-cyan">Protect Gujarat's Grid & Drive Carbon Neutrality</span>
+        </h2>
+
+        <p class="text-xs sm:text-sm text-slate-300 leading-relaxed mb-6">
+          During evening peak hours (18:00–22:00 IST), Gujarat's power network faces severe thermal generation strain. By coordinating residential smart load-shifting with solar battery dispatch across UGVCL, DGVCL, MGVCL, PGVCL, and Torrent Power, citizen prosumers shave peak stress, earn LiFE points, and accelerate Gujarat towards 2030 Net Zero goals.
+        </p>
+
+        <div class="flex items-center space-x-4">
+          <button id="btnBackToHero" class="px-4 py-2.5 text-xs font-semibold rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-300 border border-slate-700 transition">
+            ← Back
+          </button>
+          <button id="btnEnterCockpit" class="flex-1 px-6 py-3 text-xs sm:text-sm font-bold rounded-xl bg-gradient-to-r from-cyan-500 to-emerald-500 hover:from-cyan-400 hover:to-emerald-400 text-slate-950 transition shadow-lg shadow-cyan-500/20 flex items-center justify-center gap-2">
+            <span>Enter LiFE Cockpit</span>
+            <span>⚡</span>
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- STATE 2: SPACESHIP COCKPIT VIEWPORT (7 MISSION LiFE THEMES) -->
+    <div id="stageCockpit" class="cyera-stage z-20 flex-1 flex flex-col items-center justify-center px-4 py-6">
+      <div class="cockpit-frame-wrapper">
+        <div id="cockpitViewport" class="cockpit-viewport">
+          <!-- Outer Canopy Border & Glass Sheen -->
+          <div class="cockpit-canopy-border"></div>
+          <div class="cockpit-glass-sheen"></div>
+
+          <!-- HUD Technical Brackets -->
+          <div class="hud-corner hud-corner-tl"></div>
+          <div class="hud-corner hud-corner-tr"></div>
+          <div class="hud-corner hud-corner-bl"></div>
+          <div class="hud-corner hud-corner-br"></div>
+
+          <!-- Cockpit Header HUD -->
+          <div class="absolute top-4 left-6 right-6 flex items-center justify-between text-xs font-mono text-slate-400 z-30 pointer-events-none">
+            <div class="flex items-center space-x-2">
+              <span class="w-2 h-2 rounded-full bg-emerald-400 animate-pulse"></span>
+              <span id="cockpitCardCounter" class="text-white font-bold">Mission LiFE Priority 01 of 07</span>
+            </div>
+            <div class="text-[11px] text-purple-300 tracking-wider">
+              ORBITAL COCKPIT VIEWPORT [TILT ±5°]
+            </div>
+          </div>
+
+          <!-- 3D Card Mount Area -->
+          <div id="cockpitCardMount" class="absolute inset-x-4 sm:inset-x-8 top-12 bottom-16 relative">
+            <!-- Rendered dynamically by cyera_flow.js -->
+          </div>
+
+          <!-- Navigation Arrow Controls -->
+          <button id="btnPrevCard" class="absolute -left-4 sm:-left-6 top-1/2 -translate-y-1/2 w-10 h-10 rounded-full bg-slate-900/90 hover:bg-slate-800 border border-purple-500/40 text-white flex items-center justify-center z-40 transition shadow-lg text-lg">
+            ‹
+          </button>
+          <button id="btnNextCard" class="absolute -right-4 sm:-right-6 top-1/2 -translate-y-1/2 w-10 h-10 rounded-full bg-slate-900/90 hover:bg-slate-800 border border-purple-500/40 text-white flex items-center justify-center z-40 transition shadow-lg text-lg">
+            ›
+          </button>
+
+          <!-- Bottom Cockpit HUD & Dots Indicator -->
+          <div class="absolute bottom-3 inset-x-6 flex items-center justify-between z-30">
+            <button id="btnBackToOrbit" class="px-3 py-1.5 text-[11px] font-semibold rounded-lg bg-slate-800/80 hover:bg-slate-700 text-slate-300 border border-slate-700 transition">
+              ← Orbit View
+            </button>
+
+            <!-- Dots -->
+            <div id="cockpitDotsMount" class="flex items-center space-x-2"></div>
+
+            <button id="btnDiscoverPlatform" class="px-5 py-2 text-xs font-extrabold rounded-xl bg-gradient-to-r from-emerald-400 to-cyan-400 hover:from-emerald-300 hover:to-cyan-300 text-slate-950 transition shadow-lg shadow-emerald-400/20 flex items-center gap-1.5">
+              <span>Discover Platform</span>
+              <span>🚀</span>
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- MAIN APPLICATION CONTAINER (STATE 3) -->
+  <div id="mainAppContainer" class="relative z-10">
 
   <!-- TOP STATE IDENTITY & DISCOM BAR -->
   <div class="relative z-20 bg-gradient-to-r from-[#120826] via-[#1a0c33] to-[#0d071b] border-b border-purple-500/20 px-4 py-2 text-xs">
@@ -713,10 +879,12 @@
     </div>
   </footer>
 
+  </div> <!-- End #mainAppContainer (State 3) -->
+
   <!-- SCRIPT INCLUSIONS (In Exact Order) -->
   <script src="js/auth_db.js"></script>
   <script src="js/rewards.js"></script>
-  <script src="js/hero_3d.js"></script>
+  <script src="js/cyera_flow.js"></script>
   <script src="js/app.js"></script>
   <script src="js/calculator.js"></script>
 </body>

@@ -1,20 +1,21 @@
-/* GEDA Mission LiFE Design System Tokens & Custom Styling */
-@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Outfit:wght@500;600;700;800;900&display=swap');
+/* GEDA Mission LiFE Design System & Cyera State Engine */
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Outfit:wght@500;600;700;800;900&family=JetBrains+Mono:wght@400;600;700&display=swap');
 
 :root {
   --primary-font: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
   --display-font: 'Outfit', sans-serif;
+  --mono-font: 'JetBrains Mono', monospace;
   --color-brand-green: #10b981;
   --color-brand-emerald: #059669;
   --color-brand-solar: #f59e0b;
   --color-brand-cyan: #06b6d4;
-  --color-space-dark: #0b0819;
-  --color-space-purple: #1b0e38;
+  --color-space-dark: #0b0618;
+  --color-space-purple: #190a36;
 }
 
 body {
   font-family: var(--primary-font);
-  background-color: #080512;
+  background-color: var(--color-space-dark);
   color: #f3f4f6;
   overflow-x: hidden;
 }
@@ -23,29 +24,181 @@ h1, h2, h3, h4, .font-display {
   font-family: var(--display-font);
 }
 
-/* 3D WebGL Background Canvas */
-#bg3dCanvas {
+.font-mono {
+  font-family: var(--mono-font);
+}
+
+/* -------------------------------------------------------------
+ * HARDWARE ACCELERATION PRIMITIVES
+ * ------------------------------------------------------------- */
+.gpu-accel {
+  transform: translate3d(0, 0, 0);
+  will-change: transform, opacity;
+  backface-visibility: hidden;
+  perspective: 1000px;
+}
+
+/* -------------------------------------------------------------
+ * CYERA 4-STATE ENGINE STYLES
+ * ------------------------------------------------------------- */
+.cyera-experience {
   position: fixed;
-  top: 0;
-  left: 0;
+  inset: 0;
   width: 100vw;
   height: 100vh;
+  z-index: 50;
+  background: radial-gradient(circle at center, #160a33 0%, #0b0618 70%, #05030d 100%);
+  overflow: hidden;
+  transform: translate3d(0, 0, 0);
+  transition: opacity 0.8s cubic-bezier(0.16, 1, 0.3, 1), transform 0.8s cubic-bezier(0.16, 1, 0.3, 1);
+  will-change: opacity, transform;
+}
+
+/* State 3: Smooth Fade-out & Pointer-events disabled */
+.cyera-experience.state-3 {
+  opacity: 0;
   pointer-events: none;
-  z-index: 0;
-  opacity: 0.65;
+  transform: translate3d(0, -20px, 0) scale(1.03);
 }
 
-/* Cinematic Space-Eco Gradient Panels */
-.space-panel {
-  background: linear-gradient(135deg, rgba(18, 8, 38, 0.85) 0%, rgba(43, 16, 85, 0.7) 100%);
-  backdrop-filter: blur(20px);
-  -webkit-backdrop-filter: blur(20px);
-  border: 1px solid rgba(168, 85, 247, 0.2);
-  box-shadow: 0 15px 35px -10px rgba(18, 8, 38, 0.8);
+/* Stages transitions */
+.cyera-stage {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  flex-direction: column;
+  transition: opacity 0.6s cubic-bezier(0.16, 1, 0.3, 1), transform 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+  will-change: opacity, transform;
+  transform: translate3d(0, 0, 0);
 }
 
+/* State 0: Hero */
+.state-0 #stageHero {
+  opacity: 1;
+  pointer-events: auto;
+  transform: translate3d(0, 0, 0);
+}
+.state-0 #stageOrbit,
+.state-0 #stageCockpit {
+  opacity: 0;
+  pointer-events: none;
+  transform: translate3d(0, 25px, 0);
+}
+
+/* State 1: Orbit */
+.state-1 #stageHero {
+  opacity: 0;
+  pointer-events: none;
+  transform: translate3d(-30px, 0, 0);
+}
+.state-1 #stageOrbit {
+  opacity: 1;
+  pointer-events: auto;
+  transform: translate3d(0, 0, 0);
+}
+.state-1 #stageCockpit {
+  opacity: 0;
+  pointer-events: none;
+  transform: translate3d(30px, 0, 0);
+}
+
+/* State 2: Cockpit */
+.state-2 #stageHero,
+.state-2 #stageOrbit {
+  opacity: 0;
+  pointer-events: none;
+  transform: translate3d(0, -30px, 0);
+}
+.state-2 #stageCockpit {
+  opacity: 1;
+  pointer-events: auto;
+  transform: translate3d(0, 0, 0);
+}
+
+/* -------------------------------------------------------------
+ * SPACESHP COCKPIT VIEWPORT (CYERA GUARDIAN FRAME)
+ * ------------------------------------------------------------- */
+.cockpit-frame-wrapper {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  perspective: 1200px;
+}
+
+.cockpit-viewport {
+  position: relative;
+  width: min(92vw, 840px);
+  height: min(78vh, 560px);
+  transform-style: preserve-3d;
+  transition: transform 0.15s ease-out;
+  will-change: transform;
+}
+
+/* Cockpit Canopy Struts & HUD Borders */
+.cockpit-canopy-border {
+  position: absolute;
+  inset: -12px;
+  border: 2px solid rgba(168, 85, 247, 0.4);
+  border-radius: 28px;
+  background: linear-gradient(135deg, rgba(255, 255, 255, 0.05) 0%, rgba(255, 255, 255, 0) 50%, rgba(16, 185, 129, 0.05) 100%);
+  pointer-events: none;
+  box-shadow: 
+    inset 0 0 40px rgba(18, 8, 38, 0.9),
+    0 0 50px rgba(168, 85, 247, 0.15);
+}
+
+.cockpit-glass-sheen {
+  position: absolute;
+  inset: 0;
+  border-radius: 24px;
+  background: linear-gradient(115deg, rgba(255, 255, 255, 0.08) 0%, rgba(255, 255, 255, 0.01) 30%, transparent 60%);
+  pointer-events: none;
+  z-index: 20;
+}
+
+/* HUD Corner Marks */
+.hud-corner {
+  position: absolute;
+  width: 20px;
+  height: 20px;
+  border-color: #38bdf8;
+  pointer-events: none;
+}
+.hud-corner-tl { top: 12px; left: 12px; border-top: 2px solid #38bdf8; border-left: 2px solid #38bdf8; }
+.hud-corner-tr { top: 12px; right: 12px; border-top: 2px solid #38bdf8; border-right: 2px solid #38bdf8; }
+.hud-corner-bl { bottom: 12px; left: 12px; border-bottom: 2px solid #38bdf8; border-left: 2px solid #38bdf8; }
+.hud-corner-br { bottom: 12px; right: 12px; border-bottom: 2px solid #38bdf8; border-right: 2px solid #38bdf8; }
+
+/* Spinning Orbit HUD Animations */
+.spin-orbit-slow {
+  animation: spinOrbit 26s linear infinite;
+  transform-origin: center;
+}
+
+.spin-orbit-reverse {
+  animation: spinOrbitRev 18s linear infinite;
+  transform-origin: center;
+}
+
+@keyframes spinOrbit {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
+}
+
+@keyframes spinOrbitRev {
+  from { transform: rotate(360deg); }
+  to { transform: rotate(0deg); }
+}
+
+/* -------------------------------------------------------------
+ * GLASSMORPHISM & COLOR SYSTEM
+ * ------------------------------------------------------------- */
 .glass-panel {
-  background: rgba(15, 12, 28, 0.78);
+  background: rgba(14, 10, 28, 0.82);
   backdrop-filter: blur(18px);
   -webkit-backdrop-filter: blur(18px);
   border: 1px solid rgba(255, 255, 255, 0.08);
@@ -53,8 +206,9 @@ h1, h2, h3, h4, .font-display {
 }
 
 .glass-card {
-  background: rgba(23, 17, 43, 0.65);
+  background: rgba(22, 14, 44, 0.65);
   backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
   border: 1px solid rgba(255, 255, 255, 0.07);
   transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
 }
@@ -124,25 +278,12 @@ h1, h2, h3, h4, .font-display {
   100% { box-shadow: 0 0 0 0 rgba(168, 85, 247, 0); }
 }
 
-/* Sliders */
 input[type="range"] {
   accent-color: #10b981;
 }
 
-/* Coupon Card Dashed Border */
 .coupon-ticket {
   border-left: 4px dashed rgba(255, 255, 255, 0.15);
-}
-
-/* Onboarding Modal Overlay Animation */
-.onboarding-overlay {
-  transition: opacity 0.4s ease, visibility 0.4s ease;
-}
-
-.onboarding-overlay.hidden {
-  opacity: 0;
-  visibility: hidden;
-  pointer-events: none;
 }
 
 /* Custom Scrollbars */

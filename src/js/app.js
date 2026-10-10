@@ -367,16 +367,34 @@ function calculatePeakShiftingImpact() {
 // -------------------------------------------------------------
 function initOnboardingSystem() {
   const triggerBtn = document.getElementById("beginMissionBtn");
+  const navOnboardLink = document.getElementById("navOnboardingLink");
   const overlay = document.getElementById("onboardingOverlay");
   const closeBtn = document.getElementById("closeOnboardingBtn");
   const nextBtn = document.getElementById("onboardingNextBtn");
   const prevBtn = document.getElementById("onboardingPrevBtn");
 
-  if (triggerBtn && overlay) {
+  if (triggerBtn) {
     triggerBtn.addEventListener("click", () => {
-      currentOnboardingIndex = 0;
-      updateOnboardingSlide();
-      overlay.classList.remove("hidden");
+      if (window.cyeraFlow) {
+        window.cyeraFlow.setState(0);
+      } else if (overlay) {
+        currentOnboardingIndex = 0;
+        updateOnboardingSlide();
+        overlay.classList.remove("hidden");
+      }
+    });
+  }
+
+  if (navOnboardLink) {
+    navOnboardLink.addEventListener("click", (e) => {
+      e.preventDefault();
+      if (window.cyeraFlow) {
+        window.cyeraFlow.setState(0);
+      } else if (overlay) {
+        currentOnboardingIndex = 0;
+        updateOnboardingSlide();
+        overlay.classList.remove("hidden");
+      }
     });
   }
 
